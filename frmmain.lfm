@@ -1,0 +1,9 @@
+object main: Tmain
+  Left = 332
+  Height = 240
+  Top = 127
+  Width = 320
+  Caption = 'ProjectNoteBook'
+  OnCreate = FormCreate
+  LCLVersion = '1.8.4.0'
+end
