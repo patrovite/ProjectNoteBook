@@ -7,15 +7,18 @@ uses
   cthreads,
   {$ENDIF}{$ENDIF}
   Interfaces, // this includes the LCL widgetset
-  Forms, frmMain
-  { you can add units after this };
+  Forms, FrameViewer09, frmMain, utils, utils_date, datamodule, configuration,
+  dlgConfig, keys;
 
 {$R *.res}
 
 begin
+  Application.Scaled:=True;
   RequireDerivedFormResource:=True;
   Application.Initialize;
+  Application.CreateForm(TdmDB, dmDB);
   Application.CreateForm(Tmain, main);
+  Application.CreateForm(TfrmConfig, frmConfig);
   Application.Run;
 end.
 

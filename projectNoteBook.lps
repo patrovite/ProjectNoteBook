@@ -4,179 +4,301 @@
     <PathDelim Value="\"/>
     <Version Value="10"/>
     <BuildModes Active="Default"/>
-    <Units Count="2">
+    <Units Count="21">
       <Unit0>
         <Filename Value="projectNoteBook.lpr"/>
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="-1"/>
-        <WindowIndex Value="-1"/>
-        <TopLine Value="-1"/>
-        <CursorPos X="-1" Y="-1"/>
-        <UsageCount Value="20"/>
+        <CursorPos X="49" Y="21"/>
+        <UsageCount Value="184"/>
       </Unit0>
       <Unit1>
         <Filename Value="frmmain.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="main"/>
+        <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="frmMain"/>
         <IsVisibleTab Value="True"/>
-        <TopLine Value="130"/>
-        <CursorPos Y="130"/>
-        <UsageCount Value="20"/>
+        <TopLine Value="211"/>
+        <CursorPos Y="225"/>
+        <UsageCount Value="184"/>
+        <Bookmarks Count="2">
+          <Item0 X="12" Y="1348" ID="1"/>
+          <Item1 X="18" Y="1756" ID="2"/>
+        </Bookmarks>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
       </Unit1>
+      <Unit2>
+        <Filename Value="utils.pas"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="52"/>
+        <CursorPos X="43" Y="81"/>
+        <UsageCount Value="141"/>
+      </Unit2>
+      <Unit3>
+        <Filename Value="utils_date.pas"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="9"/>
+        <CursorPos X="22" Y="33"/>
+        <UsageCount Value="141"/>
+      </Unit3>
+      <Unit4>
+        <Filename Value="items.pas"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="10"/>
+        <CursorPos Y="32"/>
+        <UsageCount Value="130"/>
+      </Unit4>
+      <Unit5>
+        <Filename Value="projects.pas"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="-1"/>
+        <CursorPos X="9" Y="16"/>
+        <UsageCount Value="129"/>
+      </Unit5>
+      <Unit6>
+        <Filename Value="constantes.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="Constantes"/>
+        <EditorIndex Value="4"/>
+        <TopLine Value="13"/>
+        <CursorPos X="10" Y="48"/>
+        <UsageCount Value="127"/>
+        <Loaded Value="True"/>
+      </Unit6>
+      <Unit7>
+        <Filename Value="tokens.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="Tokens"/>
+        <EditorIndex Value="-1"/>
+        <CursorPos X="20" Y="36"/>
+        <UsageCount Value="126"/>
+      </Unit7>
+      <Unit8>
+        <Filename Value="datamodule.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="dmDB"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="DataModule"/>
+        <EditorIndex Value="-1"/>
+        <CursorPos X="12" Y="14"/>
+        <UsageCount Value="98"/>
+      </Unit8>
+      <Unit9>
+        <Filename Value="configuration.pas"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="1"/>
+        <TopLine Value="54"/>
+        <CursorPos Y="91"/>
+        <UsageCount Value="73"/>
+        <Loaded Value="True"/>
+      </Unit9>
+      <Unit10>
+        <Filename Value="dlgconfig.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="frmConfig"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="dlgConfig"/>
+        <EditorIndex Value="2"/>
+        <CursorPos X="38" Y="9"/>
+        <UsageCount Value="65"/>
+        <Loaded Value="True"/>
+        <LoadedDesigner Value="True"/>
+      </Unit10>
+      <Unit11>
+        <Filename Value="roundlabel.pas"/>
+        <UnitName Value="RoundLabel"/>
+        <EditorIndex Value="-1"/>
+        <CursorPos Y="20"/>
+        <UsageCount Value="15"/>
+      </Unit11>
+      <Unit12>
+        <Filename Value="C:\lazarus\lcl\include\customform.inc"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="1000"/>
+        <CursorPos Y="1020"/>
+        <UsageCount Value="3"/>
+      </Unit12>
+      <Unit13>
+        <Filename Value="C:\lazarus\lcl\grids.pas"/>
+        <UnitName Value="Grids"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="2969"/>
+        <CursorPos Y="2989"/>
+        <UsageCount Value="9"/>
+      </Unit13>
+      <Unit14>
+        <Filename Value="tableitems.pas"/>
+        <UnitName Value="tableItems"/>
+        <EditorIndex Value="-1"/>
+        <CursorPos X="10" Y="12"/>
+        <UsageCount Value="11"/>
+      </Unit14>
+      <Unit15>
+        <Filename Value="errors.pas"/>
+        <EditorIndex Value="-1"/>
+        <CursorPos X="44" Y="16"/>
+        <UsageCount Value="12"/>
+      </Unit15>
+      <Unit16>
+        <Filename Value="dmdb.pas"/>
+        <ComponentName Value="DataModule1"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="DataModule"/>
+        <UnitName Value="dmDB"/>
+        <EditorIndex Value="-1"/>
+        <CursorPos X="17" Y="19"/>
+        <UsageCount Value="13"/>
+      </Unit16>
+      <Unit17>
+        <Filename Value="dmdb.lfm"/>
+        <EditorIndex Value="-1"/>
+        <UsageCount Value="3"/>
+        <DefaultSyntaxHighlighter Value="LFM"/>
+      </Unit17>
+      <Unit18>
+        <Filename Value="Images\keys.pas"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="3"/>
+        <CursorPos Y="15"/>
+        <UsageCount Value="22"/>
+        <Loaded Value="True"/>
+      </Unit18>
+      <Unit19>
+        <Filename Value="C:\lazarus\fpc\3.0.4\source\rtl\win64\windows.pp"/>
+        <EditorIndex Value="-1"/>
+        <UsageCount Value="10"/>
+      </Unit19>
+      <Unit20>
+        <Filename Value="C:\lazarus\fpc\3.0.4\source\rtl\win\wininc\defines.inc"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="2378"/>
+        <CursorPos X="6" Y="2407"/>
+        <UsageCount Value="10"/>
+      </Unit20>
     </Units>
-    <JumpHistory Count="30" HistoryIndex="29">
+    <JumpHistory Count="27" HistoryIndex="26">
       <Position1>
         <Filename Value="frmmain.pas"/>
-        <Caret Line="58" TopLine="39"/>
+        <Caret Line="742" Column="31" TopLine="714"/>
       </Position1>
       <Position2>
         <Filename Value="frmmain.pas"/>
-        <Caret Line="63" TopLine="39"/>
+        <Caret Line="148" Column="31" TopLine="132"/>
       </Position2>
       <Position3>
         <Filename Value="frmmain.pas"/>
-        <Caret Line="54" TopLine="39"/>
+        <Caret Line="748" Column="19" TopLine="730"/>
       </Position3>
       <Position4>
         <Filename Value="frmmain.pas"/>
-        <Caret Line="56" TopLine="39"/>
+        <Caret Line="1390" Column="14" TopLine="1366"/>
       </Position4>
       <Position5>
         <Filename Value="frmmain.pas"/>
-        <Caret Line="58" TopLine="39"/>
+        <Caret Line="758" Column="30" TopLine="746"/>
       </Position5>
       <Position6>
         <Filename Value="frmmain.pas"/>
-        <Caret Line="63" TopLine="39"/>
+        <Caret Line="150" Column="36" TopLine="135"/>
       </Position6>
       <Position7>
         <Filename Value="frmmain.pas"/>
-        <Caret Line="54" TopLine="39"/>
+        <Caret Line="758" Column="34" TopLine="730"/>
       </Position7>
       <Position8>
         <Filename Value="frmmain.pas"/>
-        <Caret Line="56" TopLine="39"/>
+        <Caret Line="1399" Column="38" TopLine="1392"/>
       </Position8>
       <Position9>
         <Filename Value="frmmain.pas"/>
-        <Caret Line="58" TopLine="39"/>
+        <Caret Line="150" Column="36" TopLine="135"/>
       </Position9>
       <Position10>
         <Filename Value="frmmain.pas"/>
-        <Caret Line="63" TopLine="39"/>
+        <Caret Line="735" Column="3" TopLine="721"/>
       </Position10>
       <Position11>
         <Filename Value="frmmain.pas"/>
-        <Caret Line="54" TopLine="39"/>
+        <Caret Line="146" TopLine="123"/>
       </Position11>
       <Position12>
         <Filename Value="frmmain.pas"/>
-        <Caret Line="56" TopLine="39"/>
+        <Caret Line="1329" Column="13" TopLine="1306"/>
       </Position12>
       <Position13>
         <Filename Value="frmmain.pas"/>
-        <Caret Line="67" TopLine="39"/>
+        <Caret Line="1352" Column="17" TopLine="1336"/>
       </Position13>
       <Position14>
         <Filename Value="frmmain.pas"/>
-        <Caret Line="54" TopLine="39"/>
+        <Caret Line="159" Column="34" TopLine="144"/>
       </Position14>
       <Position15>
         <Filename Value="frmmain.pas"/>
-        <Caret Line="56" TopLine="39"/>
+        <Caret Line="662" Column="22" TopLine="634"/>
       </Position15>
       <Position16>
         <Filename Value="frmmain.pas"/>
-        <Caret Line="58" TopLine="39"/>
+        <Caret Line="1352" Column="24" TopLine="1324"/>
       </Position16>
       <Position17>
         <Filename Value="frmmain.pas"/>
-        <Caret Line="59" TopLine="39"/>
+        <Caret Line="1740" TopLine="1717"/>
       </Position17>
       <Position18>
         <Filename Value="frmmain.pas"/>
-        <Caret Line="60" TopLine="39"/>
+        <Caret Line="161" Column="15" TopLine="130"/>
       </Position18>
       <Position19>
         <Filename Value="frmmain.pas"/>
-        <Caret Line="61" TopLine="39"/>
+        <Caret Line="1747" Column="18" TopLine="1729"/>
       </Position19>
       <Position20>
-        <Filename Value="frmmain.pas"/>
-        <Caret Line="63" TopLine="39"/>
+        <Filename Value="Images\keys.pas"/>
+        <Caret Line="122" TopLine="91"/>
       </Position20>
       <Position21>
-        <Filename Value="frmmain.pas"/>
-        <Caret Line="54" TopLine="39"/>
+        <Filename Value="Images\keys.pas"/>
+        <Caret Line="15" TopLine="2"/>
       </Position21>
       <Position22>
-        <Filename Value="frmmain.pas"/>
-        <Caret Line="56" TopLine="39"/>
+        <Filename Value="Images\keys.pas"/>
+        <Caret Line="8" Column="33"/>
       </Position22>
       <Position23>
-        <Filename Value="frmmain.pas"/>
-        <Caret Line="58" TopLine="39"/>
+        <Filename Value="dlgconfig.pas"/>
+        <Caret Line="49" Column="89" TopLine="28"/>
       </Position23>
       <Position24>
-        <Filename Value="frmmain.pas"/>
-        <Caret Line="63" TopLine="39"/>
+        <Filename Value="Images\keys.pas"/>
+        <Caret Line="19" TopLine="5"/>
       </Position24>
       <Position25>
-        <Filename Value="frmmain.pas"/>
-        <Caret Line="54" TopLine="39"/>
+        <Filename Value="constantes.pas"/>
+        <Caret Line="48" Column="10" TopLine="13"/>
       </Position25>
       <Position26>
-        <Filename Value="frmmain.pas"/>
-        <Caret Line="56" TopLine="39"/>
+        <Filename Value="configuration.pas"/>
+        <Caret Line="64" Column="22" TopLine="41"/>
       </Position26>
       <Position27>
         <Filename Value="frmmain.pas"/>
-        <Caret Line="19" Column="34" TopLine="13"/>
+        <Caret Line="238" Column="56" TopLine="206"/>
       </Position27>
-      <Position28>
-        <Filename Value="frmmain.pas"/>
-        <Caret Line="92" Column="6" TopLine="71"/>
-      </Position28>
-      <Position29>
-        <Filename Value="frmmain.pas"/>
-        <Caret Line="106" Column="14" TopLine="97"/>
-      </Position29>
-      <Position30>
-        <Filename Value="frmmain.pas"/>
-        <Caret Line="166" TopLine="136"/>
-      </Position30>
     </JumpHistory>
   </ProjectSession>
   <Debugging>
-    <BreakPoints Count="1">
+    <Watches Count="1">
       <Item1>
-        <Kind Value="bpkSource"/>
-        <WatchScope Value="wpsLocal"/>
-        <WatchKind Value="wpkWrite"/>
-        <Source Value="frmmain.pas"/>
-        <Line Value="54"/>
+        <Expression Value="sList"/>
       </Item1>
-    </BreakPoints>
-    <Watches Count="5">
-      <Item1>
-        <Expression Value="s"/>
-      </Item1>
-      <Item2>
-        <Expression Value="token"/>
-      </Item2>
-      <Item3>
-        <Expression Value="token[n]"/>
-      </Item3>
-      <Item4>
-        <Expression Value="n"/>
-      </Item4>
-      <Item5>
-        <Expression Value="step"/>
-      </Item5>
     </Watches>
   </Debugging>
 </CONFIG>

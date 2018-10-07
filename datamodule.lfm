@@ -1,0 +1,34 @@
+object dmDB: TdmDB
+  OldCreateOrder = False
+  Height = 489
+  HorizontalOffset = 703
+  VerticalOffset = 330
+  Width = 728
+  PPI = 96
+  object Connection: TSQLite3Connection
+    Connected = False
+    LoginPrompt = False
+    KeepConnection = False
+    Transaction = Transaction
+    left = 76
+    top = 60
+  end
+  object SQLQuery: TSQLQuery
+    FieldDefs = <>
+    Database = Connection
+    Transaction = Transaction
+    Params = <>
+    left = 80
+    top = 208
+  end
+  object Transaction: TSQLTransaction
+    Active = False
+    Database = Connection
+    left = 80
+    top = 128
+  end
+  object DataSource: TDataSource
+    left = 80
+    top = 288
+  end
+end
