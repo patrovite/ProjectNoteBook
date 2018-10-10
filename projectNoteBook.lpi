@@ -37,7 +37,7 @@
         <PackageName Value="LCL"/>
       </Item4>
     </RequiredPackages>
-    <Units Count="12">
+    <Units Count="14">
       <Unit0>
         <Filename Value="projectNoteBook.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -99,6 +99,15 @@
         <Filename Value="Images\keys.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit11>
+      <Unit12>
+        <Filename Value="Images\errors.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit12>
+      <Unit13>
+        <Filename Value="exporthtmljs.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="exportHtmlJS"/>
+      </Unit13>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

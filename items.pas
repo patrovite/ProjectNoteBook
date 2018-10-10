@@ -26,6 +26,7 @@ type
     priority : integer; //0=low 1=medium 3=high
     progress : integer; //0..100%
     endDate : TDateTime;
+    delEndDate : boolean; //Used to initialize the 'endDate' field during the edit process
     text : string;
     creationDate : TDateTime;
     modifDate : TDateTime;
@@ -52,6 +53,7 @@ begin
     text:='';
     creationDate:=0.0;
     modifDate:=0.0;
+    delEndDate:=false;
   end;
 end;
 

@@ -104,6 +104,13 @@ object main: Tmain
       EditLabel.Width = 930
       EditLabel.Caption = 'Command line'
       EditLabel.ParentColor = False
+      EditLabel.ParentFont = False
+      EditLabel.Font.CharSet = ANSI_CHARSET
+      EditLabel.Font.Color = clWhite
+      EditLabel.Font.Height = -15
+      EditLabel.Font.Name = 'Verdana'
+      EditLabel.Font.Pitch = fpVariable
+      EditLabel.Font.Quality = fqDraft
       Font.CharSet = ANSI_CHARSET
       Font.Color = clBlack
       Font.Height = -16
@@ -113,6 +120,7 @@ object main: Tmain
       ParentFont = False
       TabOrder = 0
       OnKeyDown = edCommandLineKeyDown
+      OnKeyUp = edCommandLineKeyUp
     end
   end
   object SplitterMain: TSplitter
@@ -178,7 +186,7 @@ object main: Tmain
       BorderSpacing.Left = 10
       Caption = 'Note:'
       Font.CharSet = ANSI_CHARSET
-      Font.Color = clWhite
+      Font.Color = 7972351
       Font.Height = -13
       Font.Name = 'Verdana'
       Font.Pitch = fpVariable
@@ -213,6 +221,7 @@ object main: Tmain
       AutoSize = True
       BorderSpacing.Left = 10
       Caption = 'Items:'
+      Color = clGray
       Font.CharSet = ANSI_CHARSET
       Font.Color = clWhite
       Font.Height = -13
@@ -220,6 +229,7 @@ object main: Tmain
       Font.Pitch = fpVariable
       Font.Quality = fqDraft
       ParentFont = False
+      ParentColor = False
       TabOrder = 2
     end
     object stItemsVal: TStaticText
@@ -231,6 +241,7 @@ object main: Tmain
       AutoSize = True
       BorderSpacing.Left = 5
       Caption = '000'
+      Color = clSilver
       Font.CharSet = ANSI_CHARSET
       Font.Color = clWhite
       Font.Height = -13
@@ -238,6 +249,7 @@ object main: Tmain
       Font.Pitch = fpVariable
       Font.Quality = fqDraft
       ParentFont = False
+      ParentColor = False
       TabOrder = 3
     end
     object stTaskActive: TStaticText
@@ -250,7 +262,7 @@ object main: Tmain
       BorderSpacing.Left = 10
       Caption = 'Active task:'
       Font.CharSet = ANSI_CHARSET
-      Font.Color = clWhite
+      Font.Color = 65408
       Font.Height = -13
       Font.Name = 'Verdana'
       Font.Pitch = fpVariable
@@ -394,6 +406,7 @@ object main: Tmain
       end
       object mnuExport: TMenuItem
         Caption = 'Exporter la liste'
+        OnClick = mnuExportClick
       end
       object MenuItem2: TMenuItem
         Caption = '-'

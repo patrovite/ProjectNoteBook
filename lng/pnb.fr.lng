@@ -1,0 +1,58 @@
+# ProjectNotBook - English translation
+# Last update: 2018-10-08 - Pierre DELORE
+
+[BUTTONS]
+OKBUTTON=&Valider
+CANCELBUTTON=Annuler
+
+[ERRORS]
+ERROR_01 = Pas de texte
+ERROR_02 = Date non valide
+ERROR_03 = Commande P : Erreur de syntaxe. "P"
+ERROR_04 = Commande H : Erreur de syntaxe. "H"
+ERROR_05 = Commande D : Erreur de syntaxe. "D num" ou "D project"
+ERROR_06 = Pas d'élément dans la liste
+ERROR_07 = Commande E : Erreur de syntaxe. "E num ... or E @project ...
+ERROR_08 = La priorité doit être entre 0 et 2
+ERROR_09 = L'avancement doit être entre 0 et 100
+ERROR_10 = Commande E : Erreur de syntaxe. "E @old_project_name new_project_name"
+ERROR_11 = Commande C : Erreur de syntaxe. "C num [@project]"
+ERROR_12 = Commande X : Erreur de syntaxe. "X n/t"
+ERROR_13 = Commande F-- : Erreur de syntaxe. "F--"
+ERROR_14 = Commande F++ : Erreur de syntaxe. "F++"
+ERROR_15 = Commande F : Erreur de syntaxe. "F [-/+@project]"
+
+[MENU]
+MNUFILE=Fichier
+MNUIMPORT_LIST=Importer une liste
+MNUEXPORT_LIST=Exporter une liste
+MNUSETTINGS=Paramètres
+MNUQUIT=Quitter
+
+MNUDISPLAY=Affichage
+MNUDISPLAYPROJECTS=Projets
+MNUDISPLAYTIMELINE=Chronologique
+
+[MAIN]
+STITEMS=Eléments:
+STNOTE=Note:
+STTASKACTIVE=Tâches actives:
+
+TBDISPLAYPROJECTS_HINT=Affichage projets
+TBDISPLAYTIMELINE_HINT=Affichage chronologique
+TBALL_HINT=Montrer tous les projets
+TBNONE_HINT=Cacher tous les projets
+EDCOMMANDLINE=Ligne de commande
+
+[SETTINGS]
+TITLE=Paramètres
+GRPBLANGUAGE=Langue
+GRPBCONFIRMATION=Confirmation
+LBCONFIRMDELITEM=Confirmer l'effacement d'un élément
+LBCONFIRMDELGROUP=Confirmer l'effacement d'un projet
+GRPBGLOBALSHORTCUT=Raccourci global
+LBHIDEONMINIMIZE=Cacher lorsqu'on minimize la fenêtre
+LBHIDEONCLOSE=Cacher lors de la fermeture
+LBHIDEONSTART=Cacher au démarrage
+LBWEEKCHAR=Caractère qui représente la semaine
+LBDATEFORMAT=Format de la date

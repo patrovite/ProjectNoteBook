@@ -8,6 +8,7 @@ object frmConfig: TfrmConfig
   ClientHeight = 429
   ClientWidth = 400
   FormStyle = fsStayOnTop
+  OnShow = FormShow
   Position = poScreenCenter
   LCLVersion = '1.8.4.0'
   object ButtonPanel: TButtonPanel
@@ -66,16 +67,16 @@ object frmConfig: TfrmConfig
       Left = 8
       Height = 15
       Top = 4
-      Width = 194
-      Caption = 'Confirm the item deletion of an item'
+      Width = 133
+      Caption = 'Confirm an item deletion'
       ParentColor = False
     end
     object lbConfirmDelProject: TLabel
       Left = 8
       Height = 15
       Top = 24
-      Width = 207
-      Caption = 'Confirm the project deletion of an item'
+      Width = 139
+      Caption = 'Confirm a project deletion'
       ParentColor = False
     end
     object chkConfirmDelItem: TCheckBox
@@ -95,7 +96,7 @@ object frmConfig: TfrmConfig
       TabOrder = 1
     end
   end
-  object GroupBox1: TGroupBox
+  object grpbGlobalShortcut: TGroupBox
     Left = 7
     Height = 48
     Top = 120
@@ -226,7 +227,7 @@ object frmConfig: TfrmConfig
     ClientHeight = 77
     ClientWidth = 373
     TabOrder = 5
-    object lbCharWeek: TLabel
+    object lbWeekChar: TLabel
       Left = 8
       Height = 15
       Top = -1

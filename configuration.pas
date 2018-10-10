@@ -94,8 +94,8 @@ begin
   HideOnMinimize:=f.ReadBool('Main', 'HideOnMinimize', false);
   HideOnClose:=f.ReadBool('Main', 'HideOnClose', false);
   MinimizeOnStart:=f.ReadBool('Main', 'MinimizeOnStart', false);
-  Lang:=f.ReadString('Main', 'Lang','fr');
-  WeekChar:=f.ReadString('Main', 'WeekChar','S');
+  Lang:=f.ReadString('Main', 'Lang','en');
+  WeekChar:=f.ReadString('Main', 'WeekChar','W');
 
   f.Free;
 end;

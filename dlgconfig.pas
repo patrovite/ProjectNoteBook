@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, ButtonPanel,
-  Calendar, ValEdit, StdCtrls, keys, windows;
+  Calendar, ValEdit, StdCtrls, keys, windows, inifiles,utils,configuration;
 
 type
 
@@ -27,12 +27,12 @@ type
     chkWin: TCheckBox;
     edKey: TEdit;
     edCharWeek: TEdit;
-    GroupBox1: TGroupBox;
+    grpbGlobalShortcut: TGroupBox;
     grpbMix: TGroupBox;
     grpbConfirmation: TGroupBox;
     grpbAppState: TGroupBox;
     grpbLanguage: TGroupBox;
-    lbCharWeek: TLabel;
+    lbWeekChar: TLabel;
     lbDateFormat: TLabel;
     lbMinimizeOnStart: TLabel;
     lbHideOnMinimize: TLabel;
@@ -41,13 +41,17 @@ type
     lbConfirmDelItem: TLabel;
     lbConfirmDelProject: TLabel;
     procedure edKeyKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+    procedure FormShow(Sender: TObject);
   private
     shortkey : word;
+    config : TConfig;
+    Function Translate:boolean;
   public
     procedure setLanguage(lang : string);
     function getLanguage():string;
     procedure setKeys(modkey,key:word);
     procedure getKeys(var modkey,key:word);
+    procedure setConfig(configuration : TConfig);
   end;
 
 var
@@ -56,6 +60,11 @@ var
 implementation
 
 {$R *.lfm}
+
+procedure TfrmConfig.setConfig(configuration : TConfig);
+begin
+  config:=configuration;
+end;
 
 procedure TfrmConfig.edKeyKeyDown(Sender: TObject; var Key: Word;
   Shift: TShiftState);
@@ -67,6 +76,11 @@ begin
   edKey.Text:=s;
   //--
   key:=0; //Don't tramsit the key to the dialog
+end;
+
+procedure TfrmConfig.FormShow(Sender: TObject);
+begin
+  Translate();
 end;
 
 //------------------------------------------------------------------------------
@@ -110,6 +124,34 @@ begin
   key:=shortkey;
 end;
 
+
+Function TfrmConfig.Translate:boolean;
+Var f:TIniFile;
+    s:string;
+    i:integer;
+Begin
+  result:=false;
+  if not FileExists('.\lng\pnb.'+config.Lang+'.lng') then exit;
+
+  f:= TIniFile.Create('.\lng\pnb.'+config.Lang+'.lng');
+
+  frmConfig.Caption:=ReadLng(f,'SETTINGS','TITLE');
+  grpbLanguage.Caption:=ReadLng(f,'SETTINGS','GRPBLANGUAGE');
+  grpbConfirmation.Caption:=ReadLng(f,'SETTINGS','GRPBCONFIRMATION');
+  lbConfirmDelItem.Caption:=ReadLng(f,'SETTINGS','LBCONFIRMDELITEM');
+  lbConfirmDelProject.Caption:=ReadLng(f,'SETTINGS','LBCONFIRMDELGROUP');
+
+  grpbGlobalShortcut.Caption:=ReadLng(f,'SETTINGS','GRPBGLOBALSHORTCUT');
+
+  lbHideOnMinimize.Caption:=ReadLng(f,'SETTINGS','LBHIDEONMINIMIZE');
+  lbHideOnClose.Caption:=ReadLng(f,'SETTINGS','LBHIDEONCLOSE');
+  lbMinimizeOnStart.Caption:=ReadLng(f,'SETTINGS','LBHIDEONSTART');
+  lbWeekChar.Caption:=ReadLng(f,'SETTINGS','LBWEEKCHAR');
+  lbDateFormat.Caption:=ReadLng(f,'SETTINGS','LBDATEFORMAT');
+
+  f.Free;
+  result:=true;
+end;
 
 end.
 

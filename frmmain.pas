@@ -9,8 +9,10 @@
 { -- TODO list
 * add an undo command. Store deleted data in an backup table?
 * Display errors
-* Translation
-* global hotkey configuration
+* Translation command line help
+* commandline history with arrow (last 10 command)
+* export as hmtl with no javascript
+* macro (m macro_name) macro store in database
 -------------------------------------------------------------------------------}
 
 unit frmMain;
@@ -23,7 +25,7 @@ uses
   Classes, SysUtils, sqlite3conn, FileUtil, Forms, Controls, Graphics, Dialogs,
   StdCtrls, Menus, ExtCtrls, ComCtrls, CheckLst, LCLType,
   HtmlView, utils, items, projects, utils_date, DateUtils, constantes, tokens,
-  datamodule, configuration, dlgconfig, windows;
+  datamodule, configuration, dlgconfig, windows, inifiles, exportHtmlJS;
 
 const
   COLOR_LOW = $00FFFFFF;
@@ -83,6 +85,8 @@ type
 
     procedure ApplicationPropertiesMinimize(Sender: TObject);
     procedure ChklstProjectClickCheck(Sender: TObject);
+    procedure edCommandLineKeyUp(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
     procedure FormCloseQuery(Sender: TObject; var CanClose: boolean);
     procedure FormCreate(Sender: TObject);
@@ -92,6 +96,7 @@ type
     procedure FormShow(Sender: TObject);
     procedure mnuDisplayProjectsClick(Sender: TObject);
     procedure mnuDisplayTimelineClick(Sender: TObject);
+    procedure mnuExportClick(Sender: TObject);
     procedure mnuQuitClick(Sender: TObject);
     procedure mnuSettingsClick(Sender: TObject);
     procedure tbAllClick(Sender: TObject);
@@ -103,7 +108,7 @@ type
     NbNote: integer;
     NbTask: integer;
     NbActiveTask: integer;
-    DisplayMode: integer;
+    //DisplayMode: integer;
     StrListPre: TStringList;
     StrListPost: TStringList;
     config : TConfig;
@@ -113,6 +118,9 @@ type
     memWidth:integer;
     memHeight:integer;
     RequestToClose : boolean;
+    strCommandLine : String;
+
+    Error_STR : array[1..NB_ERROR] of string;
     //--
     procedure Hook;
     procedure Unhook;
@@ -161,6 +169,7 @@ type
     procedure UnselectProject(s:string);
     //--
     procedure ProcessHotKey(HK: LongInt);
+    Function Translate():boolean;
   end;
 
 var
@@ -205,6 +214,9 @@ begin
 
   //-- Load the configuration file
   Config.LoadConfig();
+
+  //-- Load Translate file
+  Translate();
 
   //-- Set the path to the database
   dmDB.Connection.DatabaseName := DBFILE;
@@ -471,7 +483,7 @@ begin
   begin
     item := PItem(itemList.Items[i]);
 
-    if DisplayMode=DISPLAY_PROJECTS then begin
+    if Config.DisplayMode=DISPLAY_PROJECTS then begin
       if lastProject<>item^.project then begin
         if item^.project='' then
           sd:=GLOBAL
@@ -484,7 +496,7 @@ begin
         sbr:='<br/>';
       end;
     end
-    else if DisplayMode=DISPLAY_TIMELINE then begin
+    else if Config.DisplayMode=DISPLAY_TIMELINE then begin
       if lastDate<>item^.endDate then begin
         if item^.endDate=0 then
           sd:='Sans date de fin'
@@ -499,47 +511,58 @@ begin
       end;
     end;
 
-    sp:=IntToStr(item^.priority);
-
     //-- Notes
     if item^.itemType = ITEM_NOTE then
     begin
+      sp:=IntToStr(item^.priority);
+
       sList.Add('<tr>');
       sList.Add(' <td>&nbsp&nbsp</td>');
       sList.Add(' <td align="right" valign="top"><span id="num">' + IntToStr(i + 1) + '. </span></td>');
-      if item^.project <> '' then
+
+      if (item^.project <> '') and (config.DisplayMode=DISPLAY_TIMELINE) then
         sList.Add(' <td valign="top"><span id="logo0">&#33</span>&nbsp<span id="text' + sp + '">' + item^.Text +
           '</span>&nbsp<span id="project">&nbsp' +
           item^.project + '&nbsp</span></td>')
       else
         sList.Add(' <td><span id="logo0">&#33</span>&nbsp<span id="text'+sp+'">' + item^.Text + '</span></td>');
+
       sList.Add('</tr>');
     end
     //-- Tasks
     else if item^.itemType = ITEM_TASK then
     begin
-      if item^.progress<>100 then
-        sl:='<span id="logo0">&#163</span>&nbsp'
-      else
+      if item^.progress<>100 then begin
+        sp:=IntToStr(item^.priority);
+        sl:='<span id="logo0">&#163</span>&nbsp';
+      end
+      else begin
+        sp:='3'; //Finished>Green
         sl:='<span id="logo1">&#82</span>&nbsp';
+      end;
 
       sList.Add('<tr>');
       sList.Add(' <td>&nbsp&nbsp</td>');
       sList.Add(' <td align="right" valign="top"><span id="num">' + IntToStr(i + 1) + '. </span></td>');
-      if item^.project <> '' then
+
+      if (item^.project <> '') and (config.DisplayMode=DISPLAY_TIMELINE) then
         sList.Add(' <td valign="top">'+sl+'<span id="text' + sp + '">' + item^.Text +
           '</span>&nbsp<span id="project">&nbsp' +
           item^.project + '&nbsp</span></td>')
       else
         sList.Add(' <td>'+sl+'<span id="text'+ sp +'">' + item^.Text + '</span></td>');
+
       sList.Add('</tr>');
       sList.Add('<tr>');
       sList.Add(' <td></td>');
       sList.Add(' <td></td>');
 
       s := FormatDateTimeEx(ToFormatDate(config.DateOrder), item^.endDate);
-      if s <> '' then
-        s := ' >' + s;
+      if (s <> '') and (config.DisplayMode=DISPLAY_PROJECTS) then
+        s := ' >' + s
+      else
+        s:='';
+
       sList.Add(' <td><span id="info">' + IntToStr(item^.progress) + '%' + s + '</span></td>');
       sList.Add('</tr>');
     end;
@@ -570,19 +593,54 @@ begin
     if (n <> 0) then
     begin
       if Analyze(n, act) then begin
-        if act=ACT_OK then
+        if act=ACT_OK then begin
           edCommandLine.Text := '';
+          edCommandLine.EditLabel.Caption:=strCommandLine;
+        end;
+
       end;
     end;
   end;
 end;
 
 
+//------------------------------------------------------------------------------
+procedure Tmain.edCommandLineKeyUp(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+var
+    c,s:string;
+begin
+  s:=strCommandLine;
+  if Length(edCommandLine.Text)>0 then begin
+    c:=lowercase(edCommandLine.Text[1]);
+    if c='e' then
+      s:='Edit: e "num" || e "num" [@Project] [Px] [>x] [%x] [%e] [text] || e @project new_project_name'
+    else if c='t' then
+      s:='Create task: t [@projects] [Px] [>x] [%x] [%e] Text'
+    else if c='n' then
+      s:='Create note: n [@projects] [Px] Text'
+    else if c='d' then
+      s:='Delete: d "num" || d [@Project]'
+    else if c='c' then
+      s:='Copy: c "num" [@project]'
+    else if c='x' then
+      s:='Convert task<>note: x "num" [n/t]'
+    else if c='f' then
+      s:='Filter projects: f [+/-][@projects] || f-- (none) || f++ (all)'
+    else if c='h' then
+      s:='Timeline display: h'
+    else if c='p' then
+      s:='Projects display: p';
+  end;
+
+  edCommandLine.EditLabel.Caption:=s;
+end;
+
 
 //------------------------------------------------------------------------------
 procedure Tmain.mnuDisplayProjectsClick(Sender: TObject);
 begin
-  DisplayMode := DISPLAY_PROJECTS;
+  Config.DisplayMode := DISPLAY_PROJECTS;
   Refresh_Display_Mode();
   Refresh();
 end;
@@ -591,9 +649,14 @@ end;
 //------------------------------------------------------------------------------
 procedure Tmain.mnuDisplayTimelineClick(Sender: TObject);
 begin
-  DisplayMode := DISPLAY_TIMELINE;
+  Config.DisplayMode := DISPLAY_TIMELINE;
   Refresh_Display_Mode();
   Refresh();
+end;
+
+procedure Tmain.mnuExportClick(Sender: TObject);
+begin
+  Export_HtmlJS('c:\tmp\test.html', itemList, config, GLOBAL);
 end;
 
 
@@ -618,6 +681,7 @@ begin
     cbDateFormat.ItemIndex:=Config.DateOrder;
     setLanguage(Config.Lang);
     setKeys(config.modkey, config.key);
+    setConfig(config);
     if ShowModal= mrOk then begin
       Config.ConfirmDeleteItem:=chkConfirmDelItem.Checked;
       Config.ConfirmDeleteProject:=chkConfirmDelProject.Checked;
@@ -629,6 +693,7 @@ begin
       Config.DateOrder:=cbDateFormat.ItemIndex;
       getKeys(config.modkey, config.key);
       //-- Update
+      Translate();
       Refresh();
       RefreshItemsList();
       RefreshTitle();
@@ -648,7 +713,7 @@ end;
 //------------------------------------------------------------------------------
 procedure Tmain.tbDisplayProjectsClick(Sender: TObject);
 begin
-  DisplayMode := DISPLAY_PROJECTS;
+  Config.DisplayMode := DISPLAY_PROJECTS;
   Refresh_Display_Mode();
   Refresh();
 end;
@@ -657,7 +722,7 @@ end;
 //------------------------------------------------------------------------------
 procedure Tmain.tbDisplayTimelineClick(Sender: TObject);
 begin
-  DisplayMode := DISPLAY_TIMELINE;
+  Config.DisplayMode := DISPLAY_TIMELINE;
   Refresh_Display_Mode();
   Refresh();
 end;
@@ -710,12 +775,12 @@ begin
   end
   else if sToken = 'd' then
     //-- Delete an item : d "num"
-    //-- Delete a project : d [Project]
+    //-- Delete a project : d [@Project]
   begin
     err := DeleteItem(n, act);
   end
   else if sToken = 'c' then
-    //-- Copy item: c "num" [projects]
+    //-- Copy item: c "num" [@project]
   begin
     err := CopyItem(n, act);
   end
@@ -1244,14 +1309,21 @@ begin
           else if (token[i][1] = '>') AND (current.itemType=ITEM_TASK) then
           begin
             s := copy(token[i], 2, length(token[i]) - 1);
+            current.delEndDate:=false;
 
-            if ParseDate(s, config.DateOrder, 8, 5, DayMonday, DayFriday, config.WeekChar[1],
-              dt, C_PARSE_NO_ADD_HOUR, False) then
-            begin
-              current.endDate := dt;
+            if s='' then begin
+              current.endDate:=0.0;
+              current.delEndDate:=true;
             end
-            else
-              err := ERROR_ENDDATE;
+            else begin
+              if ParseDate(s, config.DateOrder, 8, 5, DayMonday, DayFriday, config.WeekChar[1],
+                dt, C_PARSE_NO_ADD_HOUR, False) then
+              begin
+                current.endDate := dt;
+              end
+              else
+                err := ERROR_ENDDATE;
+            end;
           end
           //-- [%e]
           else if (Lowercase(token[i]) = '%e') AND (current.itemType=ITEM_TASK) then
@@ -1390,8 +1462,9 @@ end;
 //
 Function TMain.SetDisplayModeTimeline(n: integer; var act: integer): integer;
 begin
+  act:=ACT_OK;
   if n=1 then begin
-    DisplayMode:=DISPLAY_TIMELINE;
+    Config.DisplayMode:=DISPLAY_TIMELINE;
     Refresh();
     Refresh_Display_Mode();
     result:=0;
@@ -1407,8 +1480,9 @@ end;
 //
 Function TMain.SetDisplayModeProjects(n: integer; var act: integer): integer;
 begin
+  act:=ACT_OK;
   if n=1 then begin
-    DisplayMode:=DISPLAY_PROJECTS;
+    Config.DisplayMode:=DISPLAY_PROJECTS;
     Refresh();
     Refresh_Display_Mode();
     result:=0;
@@ -1505,8 +1579,8 @@ begin
       ', progress='+intToStr(current.progress);
 
     sd:=FormatDateTimeEx(FORMAT_DATE, current.endDate);
-    if sd<>'' then
-      s:=s+', enddate='+sd;
+    if (sd<>'') or (current.delEndDate) then
+      s:=s+', enddate="'+sd+'"';
 
     if current.text<>'' then
       s:=s+', text="'+current.text+'"';
@@ -1612,10 +1686,10 @@ begin
     s:=s + 'WHERE project IN (' + genFilter() + ') ';
 
     //-- Sort
-    if DisplayMode=DISPLAY_PROJECTS then begin
+    if Config.DisplayMode=DISPLAY_PROJECTS then begin
       s:=s + 'ORDER BY project, enddate';
     end
-    else if DisplayMode=DISPLAY_TIMELINE then begin
+    else if Config.DisplayMode=DISPLAY_TIMELINE then begin
       s:= s + 'ORDER BY enddate,project';
     end;
 
@@ -1844,11 +1918,11 @@ end;
 //
 procedure TMain.Refresh_Display_Mode();
 begin
-  mnuDisplayProjects.Checked := (DisplayMode = DISPLAY_PROJECTS);
-  mnuDisplayTimeline.Checked := (DisplayMode = DISPLAY_TIMELINE);
+  mnuDisplayProjects.Checked := (Config.DisplayMode = DISPLAY_PROJECTS);
+  mnuDisplayTimeline.Checked := (Config.DisplayMode = DISPLAY_TIMELINE);
 
-  tbDisplayProjects.Down :=  (DisplayMode = DISPLAY_PROJECTS);
-  tbDisplayTimeline.Down :=  (DisplayMode = DISPLAY_TIMELINE);
+  tbDisplayProjects.Down :=  (Config.DisplayMode = DISPLAY_PROJECTS);
+  tbDisplayTimeline.Down :=  (Config.DisplayMode = DISPLAY_TIMELINE);
 end;
 
 
@@ -1909,6 +1983,62 @@ begin
       Result := Windows.CallWindowProc(OldProc, Handle, Msg, WParam, LParam);
   end;
 end;
+
+
+Function TMain.Translate():boolean;
+Var f:TIniFile;
+    s:string;
+    i:integer;
+Begin
+  result:=false;
+  if not FileExists('.\lng\pnb.'+config.Lang+'.lng') then exit;
+
+  f:= TIniFile.Create('.\lng\pnb.'+config.Lang+'.lng');
+
+  //-- Errors
+  ERROR_STR[1]:=ReadLng(f,'ERRORS','ERROR_01');
+  ERROR_STR[2]:=ReadLng(f,'ERRORS','ERROR_02');
+  ERROR_STR[3]:=ReadLng(f,'ERRORS','ERROR_03');
+  ERROR_STR[4]:=ReadLng(f,'ERRORS','ERROR_04');
+  ERROR_STR[5]:=ReadLng(f,'ERRORS','ERROR_05');
+  ERROR_STR[6]:=ReadLng(f,'ERRORS','ERROR_06');
+  ERROR_STR[7]:=ReadLng(f,'ERRORS','ERROR_07');
+  ERROR_STR[8]:=ReadLng(f,'ERRORS','ERROR_08');
+  ERROR_STR[9]:=ReadLng(f,'ERRORS','ERROR_09');
+  ERROR_STR[10]:=ReadLng(f,'ERRORS','ERROR_10');
+  ERROR_STR[11]:=ReadLng(f,'ERRORS','ERROR_11');
+  ERROR_STR[12]:=ReadLng(f,'ERRORS','ERROR_12');
+  ERROR_STR[13]:=ReadLng(f,'ERRORS','ERROR_13');
+  ERROR_STR[14]:=ReadLng(f,'ERRORS','ERROR_14');
+  ERROR_STR[15]:=ReadLng(f,'ERRORS','ERROR_15');
+
+  //-- Menu
+  mnuFile.Caption:=ReadLng(f,'MENU','MNUFILE');
+  mnuImport.Caption:=ReadLng(f,'MENU','MNUIMPORT_LIST');
+  mnuExport.Caption:=ReadLng(f,'MENU','MNUEXPORT_LIST');
+  mnuSettings.Caption:=ReadLng(f,'MENU','MNUSETTINGS');
+  mnuQuit.Caption:=ReadLng(f,'MENU','MNUQUIT');
+
+  mnuDisplay.Caption:=ReadLng(f,'MENU','MNUDISPLAY');
+  mnuDisplayProjects.Caption:=ReadLng(f,'MENU','MNUDISPLAYPROJECTS');
+  mnuDisplayTimeline.Caption:=ReadLng(f,'MENU','MNUDISPLAYTIMELINE');
+
+  //-- Main
+  stItems.Caption:=ReadLng(f,'MAIN','STITEMS');
+  stNote.Caption:=ReadLng(f,'MAIN','STNOTE');
+  stTaskActive.Caption:=ReadLng(f,'MAIN','STTASKACTIVE');
+
+  tbDisplayProjects.Hint:=ReadLng(f,'MAIN','TBDISPLAYPROJECTS_HINT');
+  tbDisplayTimeline.Hint:=ReadLng(f,'MAIN','TBDISPLAYTIMELINE_HINT');
+  tbAll.Hint:=ReadLng(f,'MAIN','TBALL_HINT');
+  tbNone.Hint:=ReadLng(f,'MAIN','TBNONE_HINT');
+  edCommandLine.EditLabel.Caption:=ReadLng(f,'MAIN','EDCOMMANDLINE');
+  strCommandLine:=edCommandLine.EditLabel.Caption;
+
+  f.Free;
+  result:=true;
+end;
+
 
 
 end.
