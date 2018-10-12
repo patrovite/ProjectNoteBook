@@ -8,14 +8,15 @@
 //------------------------------------------------------------------------------
 { -- TODO list
 Currently:
-* commandline history with arrow (last 10 command)
-* priority erro if T or N
 
 Todo:
 * add an undo command. Store deleted data in an backup table?
 * export as hmtl with no javascript (todo?)
 * macro (m macro_name) macro store in database
 * help as html (replace the list)
+* Memorize split position
+* Memorize window size
+* Memorize window position
 -------------------------------------------------------------------------------}
 
 unit frmMain;
@@ -604,8 +605,11 @@ end;
 procedure Tmain.edCommandLineKeyDown(Sender: TObject; var Key: word;
   Shift: TShiftState);
 var
-  n, err, act: integer;
+  n, act: integer;
+  s :string;
 begin
+  act:=ACT_OK;
+
   if (key = VK_RETURN) and (Shift = []) then
   begin
     InitToken();
@@ -621,7 +625,21 @@ begin
 
       end;
     end;
+  end
+  //-- Navigate in the commandline history
+  else if key=VK_DOWN then begin
+    s:=history.getNext();
+    if s<>'' then
+      edCommandLine.Text:=s;
+    key:=0;
+  end
+  else if key=VK_UP then begin
+    s:=history.getPrev();
+    if s<>'' then
+      edCommandLine.Text:=s;
+    key:=0;
   end;
+
 end;
 
 
@@ -629,9 +647,9 @@ end;
 procedure Tmain.edCommandLineKeyUp(Sender: TObject; var Key: Word;
   Shift: TShiftState);
 var
-    c,s:string;
+  c, s:string;
 begin
-  if errnum<>0 then begin
+   if errnum<>0 then begin
     if key=VK_ESCAPE then begin
       errnum:=0;
       s:=strCommandLine;
@@ -660,15 +678,8 @@ begin
       s:=strHELP_H
     else if c='p' then
       s:=strHELP_P;
-    edCommandLine.EditLabel.Caption:=s;
   end;
-
-  //-- Navigate in the commandline history
-  if key=VK_DOWN then
-    edCommandLine.Text:=history.getNext()
-  else if key=VK_UP then
-    edCommandLine.Text:=history.getPrev();
-
+  edCommandLine.EditLabel.Caption:=s;
 end;
 
 
@@ -886,7 +897,7 @@ end;
 //
 function TMain.CreateTask(n: integer; var act: integer): integer;
 var
-  i, vi: integer;
+  i: integer;
   s, sProject: string;
   textFound: boolean;
   err: integer;
@@ -894,6 +905,7 @@ var
 begin
   result:=0;
   act:=ACT_OK;
+  dt:=0.0;
 
   err := 0;
   current.itemType := ITEM_TASK;
@@ -1041,11 +1053,10 @@ end;
 //
 function TMain.CreateNote(n: integer; var act: integer): integer;
 var
-  i, vi: integer;
+  i: integer;
   s, sProject: string;
   textFound: boolean;
   err: integer;
-  dt: TDateTime;
 begin
   result:=0;
   act:=ACT_OK;
@@ -1120,6 +1131,7 @@ var
 begin
   result:=0;
   act:=ACT_OK;
+  p:=0;
 
   if itemList.Count<=0 then begin
     result:=ERROR_NO_ITEMS;
@@ -1177,10 +1189,10 @@ function TMain.CopyItem(n: integer; var act: integer): integer;
 var
   p : integer;
   item : PItem;
-  s : string;
 begin
   result:=0;
   act:=ACT_OK;
+  p:=0;
 
   if Str2IntEx(token[2], p) then
   begin
@@ -1240,6 +1252,7 @@ var
 begin
   result:=ERROR_X_SYNTAXE;
   act:=ACT_OK;
+  p:=0;
 
   if Str2IntEx(token[2], p) then
   begin
@@ -1293,6 +1306,7 @@ begin
   num := 0;
   err:=0;
   s:='';
+  dt:=0.0;
 
   if Str2IntEx(token[2],num) then begin
     if num in [1..itemList.Count] then begin
@@ -2040,8 +2054,6 @@ end;
 
 Function TMain.Translate():boolean;
 Var f:TIniFile;
-    s:string;
-    i:integer;
 Begin
   result:=false;
   if not FileExists('.\lng\pnb.'+config.Lang+'.lng') then exit;
