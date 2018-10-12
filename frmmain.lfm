@@ -910,4 +910,9 @@ object main: Tmain
     left = 828
     top = 432
   end
+  object SaveDialog: TSaveDialog
+    Options = [ofExtensionDifferent, ofPathMustExist, ofEnableSizing, ofViewDetail]
+    left = 880
+    top = 235
+  end
 end

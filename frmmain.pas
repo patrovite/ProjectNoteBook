@@ -7,12 +7,15 @@
 //
 //------------------------------------------------------------------------------
 { -- TODO list
-* add an undo command. Store deleted data in an backup table?
-* Display errors
-* Translation command line help
+Currently:
 * commandline history with arrow (last 10 command)
-* export as hmtl with no javascript
+* priority erro if T or N
+
+Todo:
+* add an undo command. Store deleted data in an backup table?
+* export as hmtl with no javascript (todo?)
 * macro (m macro_name) macro store in database
+* help as html (replace the list)
 -------------------------------------------------------------------------------}
 
 unit frmMain;
@@ -25,7 +28,7 @@ uses
   Classes, SysUtils, sqlite3conn, FileUtil, Forms, Controls, Graphics, Dialogs,
   StdCtrls, Menus, ExtCtrls, ComCtrls, CheckLst, LCLType,
   HtmlView, utils, items, projects, utils_date, DateUtils, constantes, tokens,
-  datamodule, configuration, dlgconfig, windows, inifiles, exportHtmlJS;
+  datamodule, configuration, dlgconfig, windows, inifiles, exportHtmlJS, history;
 
 const
   COLOR_LOW = $00FFFFFF;
@@ -68,6 +71,7 @@ type
     mnuFile: TMenuItem;
     pnChecks: TPanel;
     pnBottom: TPanel;
+    SaveDialog: TSaveDialog;
     SplitterMain: TSplitter;
     stNote: TStaticText;
     stItems: TStaticText;
@@ -119,8 +123,22 @@ type
     memHeight:integer;
     RequestToClose : boolean;
     strCommandLine : String;
+    errnum: integer;
+    history : THistory;
 
     Error_STR : array[1..NB_ERROR] of string;
+    strHELP_E:string;
+    strHELP_T:string;
+    strHELP_N:string;
+    strHELP_D:string;
+    strHELP_C:string;
+    strHELP_X:string;
+    strHELP_F:string;
+    strHELP_H:string;
+    strHELP_P:string;
+    strFILTER_HTML:string;
+    strEXPORT_HTML:string;
+
     //--
     procedure Hook;
     procedure Unhook;
@@ -195,6 +213,7 @@ begin
 
   itemList := TList.Create();
   projectList := TList.Create();
+  history := THistory.Create();
 
   StrListPre := TStringList.Create();
   try
@@ -273,6 +292,7 @@ procedure Tmain.FormDestroy(Sender: TObject);
 begin
   StrListPre.Free();
   StrListPost.Free();
+  history.Destroy();
 
   dmDB.SQLQuery.Free();
   dmDB.Transaction.Free();
@@ -594,6 +614,7 @@ begin
     begin
       if Analyze(n, act) then begin
         if act=ACT_OK then begin
+          history.add(edCommandLine.Text);
           edCommandLine.Text := '';
           edCommandLine.EditLabel.Caption:=strCommandLine;
         end;
@@ -610,30 +631,44 @@ procedure Tmain.edCommandLineKeyUp(Sender: TObject; var Key: Word;
 var
     c,s:string;
 begin
-  s:=strCommandLine;
-  if Length(edCommandLine.Text)>0 then begin
+  if errnum<>0 then begin
+    if key=VK_ESCAPE then begin
+      errnum:=0;
+      s:=strCommandLine;
+    end;
+  end
+  else
+    s:=strCommandLine;
+
+  if (Length(edCommandLine.Text)>0) and (errnum=0) then begin
     c:=lowercase(edCommandLine.Text[1]);
     if c='e' then
-      s:='Edit: e "num" || e "num" [@Project] [Px] [>x] [%x] [%e] [text] || e @project new_project_name'
+      s:=strHELP_E
     else if c='t' then
-      s:='Create task: t [@projects] [Px] [>x] [%x] [%e] Text'
+      s:=strHELP_T
     else if c='n' then
-      s:='Create note: n [@projects] [Px] Text'
+      s:=strHELP_N
     else if c='d' then
-      s:='Delete: d "num" || d [@Project]'
+      s:=strHELP_D
     else if c='c' then
-      s:='Copy: c "num" [@project]'
+      s:=strHELP_C
     else if c='x' then
-      s:='Convert task<>note: x "num" [n/t]'
+      s:=strHELP_X
     else if c='f' then
-      s:='Filter projects: f [+/-][@projects] || f-- (none) || f++ (all)'
+      s:=strHELP_F
     else if c='h' then
-      s:='Timeline display: h'
+      s:=strHELP_H
     else if c='p' then
-      s:='Projects display: p';
+      s:=strHELP_P;
+    edCommandLine.EditLabel.Caption:=s;
   end;
 
-  edCommandLine.EditLabel.Caption:=s;
+  //-- Navigate in the commandline history
+  if key=VK_DOWN then
+    edCommandLine.Text:=history.getNext()
+  else if key=VK_UP then
+    edCommandLine.Text:=history.getPrev();
+
 end;
 
 
@@ -654,9 +689,26 @@ begin
   Refresh();
 end;
 
+
+//------------------------------------------------------------------------------
 procedure Tmain.mnuExportClick(Sender: TObject);
+var
+  sname,ext:string;
 begin
-  Export_HtmlJS('c:\tmp\test.html', itemList, config, GLOBAL);
+  SaveDialog.Filter := strFILTER_HTML;
+  SaveDialog.DefaultExt := 'html';
+  SaveDialog.Title := strEXPORT_HTML;
+  SaveDialog.InitialDir:=Config.LastDir;
+  if SaveDialog.Execute then begin
+    sname := SaveDialog.FileName;
+    if sname = '' then exit;
+
+    ext := ExtractFileExt(sname);
+    if LowerCase(ext) = '.html' then begin
+      Export_HtmlJS(sname, itemList, config, GLOBAL);
+      Config.LastDir:= ExtractFilePath(sname);
+    end;
+  end;
 end;
 
 
@@ -745,7 +797,6 @@ end;
 //
 function TMain.Analyze(n: integer; var act: integer): boolean;
 var
-  err: integer;
   sToken: string;
 begin
   if n = 0 then
@@ -758,8 +809,8 @@ begin
   if sToken = 't' then
     //-- Create a task : t [projects] [Px] [>x] [%x] [%e] Text
   begin
-    err := CreateTask(n, act);
-    if err = 0 then
+    errnum := CreateTask(n, act);
+    if errnum = 0 then
     begin
       Refresh();
     end;
@@ -767,8 +818,8 @@ begin
   else if sToken = 'n' then
     //-- Create a note : n [projects] [Px] Text
   begin
-    err := CreateNote(n, act);
-    if err = 0 then
+    errnum := CreateNote(n, act);
+    if errnum = 0 then
     begin
       Refresh();
     end;
@@ -777,56 +828,56 @@ begin
     //-- Delete an item : d "num"
     //-- Delete a project : d [@Project]
   begin
-    err := DeleteItem(n, act);
+    errnum := DeleteItem(n, act);
   end
   else if sToken = 'c' then
     //-- Copy item: c "num" [@project]
   begin
-    err := CopyItem(n, act);
+    errnum := CopyItem(n, act);
   end
   else if sToken = 'x' then
     //-- Convert item task<>note :x "num" [n/t]
   begin
-    err := ConvertItem(n, act);
+    errnum := ConvertItem(n, act);
   end
   else if sToken = 'e' then
   // List item in command line : e "num"
   // Edit an item : e "num" [@Project] [Px] [>x] [%x] [%e] [text]
   // Edit a project name : e @project new_project_name
   begin
-    err := EditItem(n, act);
+    errnum := EditItem(n, act);
   end
   else if sToken = 'f' then
     //-- Set a display filter on some projets : f [projects]
   begin
-    err := SetDisplayFilter(n, act);
+    errnum := SetDisplayFilter(n, act);
   end
   else if sToken = 'f--' then
     //-- hide all project : f--
   begin
-    err := DisplayFilterNone(n, act);
+    errnum := DisplayFilterNone(n, act);
   end
   else if sToken = 'f++' then
     //-- Show all projects : f--
   begin
-    err := DisplayFilterAll(n, act);
+    errnum := DisplayFilterAll(n, act);
   end
   else if sToken = 'h' then
     //-- Set display mode to timeline : h
   begin
-    err := SetDisplayModeTimeline(n, act);
+    errnum := SetDisplayModeTimeline(n, act);
   end
   else if sToken = 'p' then
     //-- Set display mode to projects : p
   begin
-    err := SetDisplayModeProjects(n, act);
+    errnum := SetDisplayModeProjects(n, act);
   end;
 
-  if err<>0 then begin
-    //TODO
+  if errnum<>0 then begin
+    edCommandLine.EditLabel.Caption:=Error_STR[abs(errnum)];
   end;
 
-  Analyze := (err = 0);
+  Analyze := (errnum = 0);
 end;
 
 
@@ -1440,6 +1491,7 @@ begin
     result:=ERROR_FMM_SYNTAXE;
 end;
 
+
 //------------------------------------------------------------------------------
 // Select all project : f++
 //
@@ -1491,6 +1543,7 @@ begin
     result:=ERROR_P_TOOMANYPARAMS;
   end;
 end;
+
 
 //------------------------------------------------------------------------------
 // Create a new database file
@@ -2012,6 +2065,17 @@ Begin
   ERROR_STR[14]:=ReadLng(f,'ERRORS','ERROR_14');
   ERROR_STR[15]:=ReadLng(f,'ERRORS','ERROR_15');
 
+  //-- Command line help
+  strHELP_E:=ReadLng(f,'HELP','HELP_E');
+  strHELP_T:=ReadLng(f,'HELP','HELP_T');
+  strHELP_N:=ReadLng(f,'HELP','HELP_N');
+  strHELP_D:=ReadLng(f,'HELP','HELP_D');
+  strHELP_C:=ReadLng(f,'HELP','HELP_C');
+  strHELP_X:=ReadLng(f,'HELP','HELP_X');
+  strHELP_F:=ReadLng(f,'HELP','HELP_F');
+  strHELP_H:=ReadLng(f,'HELP','HELP_H');
+  strHELP_P:=ReadLng(f,'HELP','HELP_P');
+
   //-- Menu
   mnuFile.Caption:=ReadLng(f,'MENU','MNUFILE');
   mnuImport.Caption:=ReadLng(f,'MENU','MNUIMPORT_LIST');
@@ -2034,6 +2098,10 @@ Begin
   tbNone.Hint:=ReadLng(f,'MAIN','TBNONE_HINT');
   edCommandLine.EditLabel.Caption:=ReadLng(f,'MAIN','EDCOMMANDLINE');
   strCommandLine:=edCommandLine.EditLabel.Caption;
+
+  strFILTER_HTML:=ReadLng(f,'MAIN','FILTER_HTML');
+  strEXPORT_HTML:=ReadLng(f,'MAIN','EXPORT_HTML');
+
 
   f.Free;
   result:=true;

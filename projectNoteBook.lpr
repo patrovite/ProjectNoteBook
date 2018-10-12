@@ -8,7 +8,7 @@ uses
   {$ENDIF}{$ENDIF}
   Interfaces, // this includes the LCL widgetset
   Forms, FrameViewer09, frmMain, utils, utils_date, datamodule, configuration,
-  dlgConfig, keys, errors, exportHtmlJS;
+  dlgConfig, keys, errors, exportHtmlJS, history;
 
 {$R *.res}
 

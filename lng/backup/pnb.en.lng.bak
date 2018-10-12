@@ -1,0 +1,69 @@
+# ProjectNotBook - English translation
+# Last update: 2018-10-08 - Pierre DELORE
+
+[BUTTONS]
+OKBUTTON=&OK
+CANCELBUTTON=Cancel
+
+[ERRORS]
+ERROR_01 = No text
+ERROR_02 = Not a valid date
+ERROR_03 = P command : syntaxe error. "P"
+ERROR_04 = H command : syntaxe error. "H"
+ERROR_05 = D command : syntaxe error. "D num" or "D project"
+ERROR_06 = No item in the list.
+ERROR_07 = E command, first parameter must be the item number or a project. "E num ... or E @project ...
+ERROR_08 = Priority must between 0 and 2
+ERROR_09 = Progress must between 0 and 100
+ERROR_10 = E command : syntaxe error. "E @old_project_name new_project_name"
+ERROR_11 = C command : syntaxe error. "C num [@project]"
+ERROR_12 = X command : syntaxe error. "X n/t"
+ERROR_13 = F-- command : Syntaxe error. "F--"
+ERROR_14 = F++ command : Syntaxe error. "F++"
+ERROR_15 = F command : Syntaxe error. "F [-/+@project]"
+
+[HELP]
+HELP_E=Edit: e "num" || e "num" [@Project] [Px] [>x] [%x] [%e] [text] || e @project new_project_name
+HELP_T=Create task: t [@projects] [Px] [>x] [%x] [%e] Text
+HELP_N=Create note: n [@projects] [Px] Text
+HELP_D=Delete item or project: d "num" || d [@Project]
+HELP_C=Copy: c "num" [@project]
+HELP_X=Convert task<>note: x "num" [n/t]
+HELP_F=Filter projects: f [+/-][@projects] || f-- (none) || f++ (all)
+HELP_H=Timeline display: h
+HELP_P=Projects display: p
+
+[MENU]
+MNUFILE=File
+MNUIMPORT_LIST=Import a list
+MNUEXPORT_LIST=Export a list
+MNUSETTINGS=Settings
+MNUQUIT=Quit
+
+MNUDISPLAY=Display
+MNUDISPLAYPROJECTS=Projects
+MNUDISPLAYTIMELINE=Timeline
+
+[MAIN]
+STITEMS=Items:
+STNOTE=Note:
+STTASKACTIVE=Active task:
+
+TBDISPLAYPROJECTS_HINT=Projects display
+TBDISPLAYTIMELINE_HINT=Timeline display
+TBALL_HINT=Show all projects
+TBNONE_HINT=Hide all projects
+EDCOMMANDLINE=Command line
+
+[SETTINGS]
+TITLE=Settings
+GRPBLANGUAGE=Language
+GRPBCONFIRMATION=Confirmation
+LBCONFIRMDELITEM=Confirm an item deletion
+LBCONFIRMDELGROUP=Confirm a project deletion
+GRPBGLOBALSHORTCUT=Global shortcut
+LBHIDEONMINIMIZE=Hide on minimized
+LBHIDEONCLOSE=Hide on close
+LBHIDEONSTART=Hide on start
+LBWEEKCHAR=Character that representea week
+LBDATEFORMAT=Date format

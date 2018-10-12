@@ -22,6 +22,17 @@ ERROR_13 = F-- command : Syntaxe error. "F--"
 ERROR_14 = F++ command : Syntaxe error. "F++"
 ERROR_15 = F command : Syntaxe error. "F [-/+@project]"
 
+[HELP]
+HELP_E=Edit: e "num" || e "num" [@Project] [Px] [>x] [%x] [%e] [text] || e @project new_project_name
+HELP_T=Create task: t [@projects] [Px] [>x] [%x] [%e] Text
+HELP_N=Create note: n [@projects] [Px] Text
+HELP_D=Delete item or project: d "num" || d [@Project]
+HELP_C=Copy: c "num" [@project]
+HELP_X=Convert task<>note: x "num" [n/t]
+HELP_F=Filter projects: f [+/-][@projects] || f-- (none) || f++ (all)
+HELP_H=Timeline display: h
+HELP_P=Projects display: p
+
 [MENU]
 MNUFILE=File
 MNUIMPORT_LIST=Import a list
@@ -37,7 +48,8 @@ MNUDISPLAYTIMELINE=Timeline
 STITEMS=Items:
 STNOTE=Note:
 STTASKACTIVE=Active task:
-
+FILTER_HTML=HTML file(*.html)|*.html
+EXPORT_HTML=Export list in HTML
 TBDISPLAYPROJECTS_HINT=Projects display
 TBDISPLAYTIMELINE_HINT=Timeline display
 TBALL_HINT=Show all projects

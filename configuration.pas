@@ -27,6 +27,7 @@ type
       WeekChar : string;
       modkey : word;
       key : word;
+      LastDir : string;
       Procedure SaveConfig();
       Procedure LoadConfig();
   end;
@@ -45,6 +46,7 @@ begin
   HideOnMinimize:=false;
   WeekChar:='S';
   DateOrder:=DATE_DMY;
+  LastDir:='';
 end;
 
 
@@ -69,7 +71,7 @@ begin
   f.WriteBool('Main','MinimizeOnStart',MinimizeOnStart);
   f.WriteString('Main','Lang',Lang);
   f.WriteString('Main','WeekChar',WeekChar);
-
+  f.WriteString('Main','LastDir',LastDir);
 
   f.Free;
 end;
@@ -96,6 +98,7 @@ begin
   MinimizeOnStart:=f.ReadBool('Main', 'MinimizeOnStart', false);
   Lang:=f.ReadString('Main', 'Lang','en');
   WeekChar:=f.ReadString('Main', 'WeekChar','W');
+  LastDir:=f.ReadString('Main', 'LastDir','');
 
   f.Free;
 end;

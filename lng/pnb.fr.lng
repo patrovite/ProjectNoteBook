@@ -22,6 +22,17 @@ ERROR_13 = Commande F-- : Erreur de syntaxe. "F--"
 ERROR_14 = Commande F++ : Erreur de syntaxe. "F++"
 ERROR_15 = Commande F : Erreur de syntaxe. "F [-/+@project]"
 
+[HELP]
+HELP_E=Edition: e "num" || e "num" [@Projet] [Px] [>x] [%x] [%e] [text] || e @projet nouveau_nom_projet
+HELP_T=Création tâche: t [@projets] [Px] [>x] [%x] [%e] Texte
+HELP_N=Création note: n [@projets] [Px] Texte
+HELP_D=Suppression élément ou projet: d "num" || d [@Projet]
+HELP_C=Copie: c "num" [@projet]
+HELP_X=Convertion tâche<>note: x "num" [n/t]
+HELP_F=Filtre projets: f [+/-][@projets] || f-- (aucun) || f++ (tous)
+HELP_H=Affichage chronologique: h
+HELP_P=Affichage projet: p
+
 [MENU]
 MNUFILE=Fichier
 MNUIMPORT_LIST=Importer une liste
@@ -37,7 +48,8 @@ MNUDISPLAYTIMELINE=Chronologique
 STITEMS=Eléments:
 STNOTE=Note:
 STTASKACTIVE=Tâches actives:
-
+FILTER_HTML=Fichier HTML (*.html)|*.html
+EXPORT_HTML=Export liste en HTML
 TBDISPLAYPROJECTS_HINT=Affichage projets
 TBDISPLAYTIMELINE_HINT=Affichage chronologique
 TBALL_HINT=Montrer tous les projets

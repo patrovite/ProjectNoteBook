@@ -37,7 +37,7 @@
         <PackageName Value="LCL"/>
       </Item4>
     </RequiredPackages>
-    <Units Count="14">
+    <Units Count="15">
       <Unit0>
         <Filename Value="projectNoteBook.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -108,6 +108,10 @@
         <IsPartOfProject Value="True"/>
         <UnitName Value="exportHtmlJS"/>
       </Unit13>
+      <Unit14>
+        <Filename Value="history.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit14>
     </Units>
   </ProjectOptions>
   <CompilerOptions>
