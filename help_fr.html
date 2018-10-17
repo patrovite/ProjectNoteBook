@@ -1,0 +1,383 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<STYLE TYPE="text/css">
+			body {
+				background-color: #3C3C3C;
+			}
+			UNKNOWN
+			{
+				 FONT-FAMILY: Verdana;
+				 BACKGROUND-COLOR: white;
+			}
+			H1
+			{
+				font-weight: normal;
+				font-size: 100%;
+				color: #BB6F6B;
+				font-family: Verdana;
+			}
+			li {
+				color: white;
+				font-family: Verdana;
+			}
+			#entete {
+				color: #FCBC80;
+				font-weight: normal;
+				font-family: Verdana;
+			}
+			#cmd {
+				color: #F7E29C; 
+				font-weight: normal;
+				font-family: Verdana;
+				font-style: italic;
+			}
+
+		</STYLE>
+		<title>Aide ProjectNoteBook</title>
+	</head>
+	<body>
+
+		<h1>Création d'une tâche</h1>
+		<ul>
+			<li><span id="entete">Syntaxe</span> : <span id="cmd">t [@projects] [Px] [>x] [%x] [%e] Texte</span></li>
+			<li><span id="entete">Description</span> : Création d'un élément tâche.</li>
+			<li><span id="entete">Paramètres</span> :</li>
+			<ul>
+				<li><span id="cmd">[@projects]</span> : "@" suivi du nom du projet. Pas d'espace ou de tabulation dans le nom du projet.</li>
+				<ul>
+					<li>Optionnel: oui</li>
+					<li>Défaut: Si aucun projet est déclaré alors la tâche sera globale.</li>
+					<li>Exemple:  @project1</li>
+				</ul>
+				<li><span id="cmd">[Px]</span> : Priorité. "x" est le niveau de priorité. Valeur entre 0 et 2. 0:Normale. 1:Moyenne. 2:Haute</li>
+				<ul>
+					<li>Optionnel: oui</li>
+					<li>Défaut: 0 (Normal)</li>
+					<li>Exemple: p0</li>
+				</ul>
+				<li><span id="cmd">[>x]</span> : Date de fin. Le format de la date dépend des paramètres de l'application.</li>
+				<ul>
+					<li>Optionnel: oui</li>
+					<li>Défaut: Pas de date de fin</li>
+					<li>Exemples:<br> 
+						&gt;12 : 12 du mois courant de l'année courante<br>
+						&gt;12/02 : 12/02 de l'année courante<br>
+						&gt;12/02/18 : 12/02/2018<br>
+						&gt;12/02/2018<br>
+						&gt;W12 : Début de la semaine 12 (Premier jour travaillé de la semaine de l'année courante)<br>
+						&gt;&lt;W12 : Fin de la semaine 12 (Dernier jour travaillé de la semaine de l'année courante)<br>
+						&gt;W12/11 : Début de la semaine 12 (Premier jour travaillé de la semaine de l'année courante)<br>
+						&gt;&lt;W12/18 : Fin de la semaine 12 (Dernier jour travaillé de la semaine de l'année courante)<br>
+						&gt;W12/2018 : Début de la semaine 12 (Premier jour travaillé de la semaine de l'année courante)<br>
+						&gt;&lt;W12/2018 : Fin de la semaine 12 (Dernier jour travaillé de la semaine de l'année courante)<br>
+					</li>
+				</ul>
+				<li><span id="cmd">[%x]</span> : Pourcentage d'avancement. Valeur entre 0 et 100.</li>
+				<ul>
+					<li>Optionnel: oui</li>
+					<li>Défaut: 0%</li>
+					<li>Exemple: %50 (50%)</li>
+				</ul>
+				<li><span id="cmd">[%e]</span> : Tâche terminée. Met le pourcentage d'avancement à 100%.</li>
+				<ul>
+					<li>Optionnel: oui</li>
+					<li>Défaut: Pas de modification</li>
+					<li>Exemple: %e</li>
+				</ul>
+				<li><span id="cmd">Texte</span> : Texte de la tâche.</li>
+				<ul>
+					<li>Optionnel: non</li>
+				</ul>
+			</ul>
+			<li><span id="entete">Exemples</span> :</li>
+			<ul>
+				<li><span id="cmd">t @project1 p1 %25 écrire l'application</span>: Cela crée une tâche pour "project1" avec une priorité 1 (moyenne), un avancement de 25% et un texte "écrire l'application"</li>
+				<li><span id="cmd">t p2 régler le problème</span>: Cela crée une tâche "global" avec une priorité de 2 (haute), un avancement de 0% (Défaut) et un texte "régler le problème"</li>
+				<li><span id="cmd">t @prj1 @prj2 @prj3 régler le problem</span>: Cela crée une tâche pour les projets "prj1", "prj2" et "prj3" avec une priorité de 0 (normale, défaut), un avancement de 0% (Défaut) et un texte "régler le problème"</li>
+			</ul>
+
+		</ul>
+
+		<h1>Création d'une note</h1>
+		<ul>
+			<li><span id="entete">Syntaxe</span> : <span id="cmd">n [@projects] [Px] Texte</span></li>
+			<li><span id="entete">Description</span> : Crée une élément note.</li>
+			<li><span id="entete">Paramètres</span> :</li>
+			<ul>
+				<li><span id="cmd">[@projects]</span> : "@" suivi du nom du projet. Pas d'espace ou de tabulation dans le nom du projet.</li>
+				<ul>
+					<li>Optionnel: oui</li>
+					<li>Défaut: Si aucun projet est déclaré alors la tâche sera globale.</li>
+					<li>Exemple:  @project1</li>
+				</ul>
+				<li><span id="cmd">[Px]</span> : Priorité. "x" est le niveau de priorité. Valeur de 0 à 2. 0:Normale. 1:Moyenne. 2:Haute</li>
+				<ul>
+					<li>Optionnel: oui</li>
+					<li>Défaut: 0 (Normal)</li>
+					<li>Exemple: p0</li>
+				</ul>
+				<li><span id="cmd">Texte</span> : Texte de la note.</li>
+				<ul>
+					<li>Optionnel: non</li>
+				</ul>
+			</ul>
+			<li><span id="entete">Exemples</span> :</li>
+			<ul>
+				<li><span id="cmd">n @project1 p1 Ceci est une note</span>: Cela crée une note pour "project1" avec une priorité de 1 (moyenne) et le texte "Ceci est une note"</li>
+				<li><span id="cmd">n Le ciel est bleu</span>: Cela crée une note "global" avec une priorité de 0 et une texte "Le ciel est bleu"</li>
+				<li><span id="cmd">n @prj1 @prj2 @prj3 La couleur est bleu</span>: Cela crée une note pour les projets "prj1", "prj2" et "prj3" avec une priorité de 0 (normale, Défaut) et le texte "La couleur est bleu"</li>
+			</ul>
+		</ul>
+
+		<h1>Edition d'un élément</h1>
+		<ul>
+			<li><span id="entete">Syntaxe</span> : <span id="cmd">e num</span></li>
+			<li><span id="entete">Description</span> : Copie le contenu de l'élément "num" dans la ligne de commande afin d'être éditée. Une fois éditée, appuyez sur ENTREE pour mettre à jour l'élément. La syntaxe est la même que l'élément édité (note ou tâche)</li>
+			<li><span id="entete">Paramètres</span> :</li>
+			<ul>
+				<li><span id="cmd">num</span> : Numéro de l'élément.</li>
+				<ul>
+					<li>Optionnel: non</li>
+				</ul>
+			</ul>
+			<li><span id="entete">Exemples</span> :</li>
+			<ul>
+				<li><span id="cmd">e 5</span>: Cette commande affiche le contenu de l'élément 5. Editez le contenu et appuyez sur ENTREE pour mettre à jour l'élément</li>
+			</ul>
+		</ul>
+
+		<h1>Edition d'un élément</h1>
+		<ul>
+			<li><span id="entete">Syntaxe</span> : <span id="cmd">e num [@projects] [Px] [>x] [%x] [%e] [Text]</span></li>
+			<li><span id="entete">Description</span> : Met à jour l'élément "num" avec les paramètres de la ligne de commande.</li>
+			<li><span id="entete">Paramètres</span> :</li>
+			<ul>
+				<li><span id="cmd">num</span> : Numéro de l'élément à éditer.</li>
+				<ul>
+					<li>Optionnel: non</li>
+				</ul>
+				<li><span id="cmd">[@projects]</span> : "@" suivi du nom du projet. Pas d'espace ou de tabulation dans le nom du projet.</li>
+				<ul>
+					<li>Optionnel: oui</li>
+					<li>Défaut: Si aucun projet est déclaré alors la tâche sera globale.</li>
+					<li>Exemple:  @project1</li>
+				</ul>
+				<li><span id="cmd">[Px]</span> : Priorité. "x" est le niveau de priorité. Valeur entre 0 et 2. 0:Normale. 1:Moyenne. 2:Haute</li>
+				<ul>
+					<li>Optionnel: oui</li>
+					<li>Défaut: 0 (Normale)</li>
+					<li>Exemple: p0</li>
+				</ul>
+				<li><span id="cmd">[>x]</span> : Date de fin. Le format de la date dépend des paramètres de l'application.</li>
+				<ul>
+					<li>Optionnel: oui</li>
+					<li>Défaut: Pas de date de fin</li>
+					<li>Exemples:<br> 
+						&gt;12 : 12 du mois courant de l'année courante<br>
+						&gt;12/02 : 12/02 de l'année courante<br>
+						&gt;12/02/18 : 12/02/2018<br>
+						&gt;12/02/2018<br>
+						&gt;W12 : Début de la semaine 12 (Premier jour travaillé de la semaine de l'année courante)<br>
+						&gt;&lt;W12 : Fin de la semaine 12 (Dernier jour travaillé de la semaine de l'année courante)<br>
+						&gt;W12/11 : Début de la semaine 12 (Premier jour travaillé de la semaine de l'année courante)<br>
+						&gt;&lt;W12/18 : Fin de la semaine 12 (Dernier jour travaillé de la semaine de l'année courante)<br>
+						&gt;W12/2018 : Début de la semaine 12 (Premier jour travaillé de la semaine de l'année courante)<br>
+						&gt;&lt;W12/2018 : Fin de la semaine 12 (Dernier jour travaillé de la semaine de l'année courante)<br>
+					</li>
+				</ul>
+				<li><span id="cmd">[%x]</span> : Pourcentage d'avancement. Valeur entre 0 et 100.</li>
+				<ul>
+					<li>Optionnel: oui</li>
+					<li>Défaut: 0%</li>
+					<li>Exemple: %50 (50%)</li>
+				</ul>
+				<li><span id="cmd">[%e]</span> : Tâche terminée. Met le pourcentage d'avancement à 100%.</li>
+				<ul>
+					<li>Optionnel: oui</li>
+					<li>Défaut: Pas de modification</li>
+					<li>Exemple: %e</li>
+				</ul>
+				<li><span id="cmd">Texte</span> : Texte de la tâche.</li>
+				<ul>
+					<li>Optionnel: non</li>
+				</ul>
+			</ul>
+			<li><span id="entete">Exemples</span> :</li>
+			<ul>
+				<li><span id="cmd">e 5 @prj2</span>: Pour l'élément numéro 5, on met à jour le nom du projet à "prj2"</li>
+				<li><span id="cmd">e 5 p1</span>: Pour l'élément numéro 5, on met à jour la priorité à 1 (moyenne)</li>
+				<li><span id="cmd">e 5 %25</span>: Pour l'élément numéro 5, on met à jour l'avancement à 25%</li>
+				<li><span id="cmd">e 5 >19/11/18</span>: Pour l'élément numéro 5, on met à jour la date de fin</li>
+				<li><span id="cmd">e 5 New text</span>: Pour l'élément numéro 5, on met à jour le texte</li>
+				<li><span id="cmd">e 5 @prj2 %25 p2 new text</span>: Pour l'élément numéro 5, on met à jour les différents paramètres</li>
+			</ul>
+		</ul>
+
+		<h1>Editer un projet</h1>
+		<ul>
+			<li><span id="entete">Syntaxe</span> : <span id="cmd">e @project nouveau_nom_projet</span></li>
+			<li><span id="entete">Description</span> : Renome un projet</li>
+			<li><span id="entete">Paramètres</span> :</li>
+			<ul>
+				<li><span id="cmd">@project</span> : Nom du projet débutant par "@"</li>
+				<ul>
+					<li>Optionnel: non</li>
+					<li>Défaut: </li>
+				</ul>
+				<li><span id="cmd">nouveau_nom_projet</span> : Nouveau nom de projet</li>
+				<ul>
+					<li>Optionnel: non</li>
+				</ul>
+			</ul>
+			<li><span id="entete">Exemples</span> :</li>
+			<ul>
+				<li><span id="cmd">e @project1 project2</span>: Renome "project1" en "project2". Cela va mettre à jour tous les éléments contenant "project1"</li>
+			</ul>
+		</ul>
+
+		<h1>Effacer un élément</h1>
+		<ul>
+			<li><span id="entete">Syntaxe</span> : <span id="cmd">d num</span></li>
+			<li><span id="entete">Description</span> : efface un élément</li>
+			<li><span id="entete">Paramètres</span> :</li>
+			<ul>
+				<li><span id="cmd">num</span> : Numéro de l'élément à effacer</li>
+				<ul>
+					<li>Optionnel: non</li>
+				</ul>
+			</ul>
+			<li><span id="entete">Exemples</span> :</li>
+			<ul>
+				<li><span id="cmd">d 5</span>: Efface l'élément numéro 5</li>
+			</ul>
+		</ul>
+
+		<h1>Effacer un projet</h1>
+		<ul>
+			<li><span id="entete">Syntaxe</span> : <span id="cmd">d @project</span></li>
+			<li><span id="entete">Description</span> : efface un projet et tout ses éléments</li>
+			<li><span id="entete">Paramètres</span> :</li>
+			<ul>
+				<li><span id="cmd">@project</span> : Nom du projet à effacer débutant par "@"</li>
+				<ul>
+					<li>Optionnel: non</li>
+				</ul>
+			</ul>
+			<li><span id="entete">Exemples</span> :</li>
+			<ul>
+				<li><span id="cmd">d @project1</span>: Efface tous les éléments où le nom de projet est "project1"</li>
+			</ul>
+		</ul>
+
+		<h1>Copier un élément</h1>
+		<ul>
+			<li><span id="entete">Syntaxe</span> : <span id="cmd">c num [@project]</span></li>
+			<li><span id="entete">Description</span> : Copies un élément dans un projet. Si aucun projet n'est spécifié alors la copie est fait dans le même projet.</li>
+			<li><span id="entete">Paramètres</span> :</li>
+			<ul>
+				<li><span id="cmd">num</span> : Numéro de l'élément à copier</li>
+				<ul>
+					<li>Optionnel: non</li>
+				</ul>
+				<li><span id="cmd">@project</span> : Nom du projet débutant par "@"</li>
+				<ul>
+					<li>Optionnel: non</li>
+					<li>Défaut: Même projet</li>
+				</ul>
+			</ul>
+			<li><span id="entete">Exemples</span> :</li>
+			<ul>
+				<li><span id="cmd">c 5 @project1</span>: Copies l'élément numéro 5 dans le projet "project1"</li>
+				<li><span id="cmd">c 5</span>: Copie l'élément numéro 5 dans le même projet</li>
+			</ul>
+		</ul>
+
+		<h1>Convertion d'une tâche&lt;-&gt;note</h1>
+		<ul>
+			<li><span id="entete">Syntaxe</span> : <span id="cmd">x num n/t</span></li>
+			<li><span id="entete">Description</span> : Converti un élément comme note ou tâche.</li>
+			<li><span id="entete">Paramètres</span> :</li>
+			<ul>
+				<li><span id="cmd">num</span> : Numéro de l'élément à convertir</li>
+				<ul>
+					<li>Optionnel: non</li>
+				</ul>
+				<li><span id="cmd">n or t</span> : "n" converti un élément en note. "t" converti un élément en tâche.</li>
+				<ul>
+					<li>Optionnel: non</li>
+				</ul>
+			</ul>
+			<li><span id="entete">Exemples</span> :</li>
+			<ul>
+				<li><span id="cmd">x 5 t</span>: Converti un élément numéro 5 en tâche. Si l'élément est déjà une tâche alors aucun changement est réalisé.</li>
+				<li><span id="cmd">x 5 n</span>: Converti un élément numéro 5 en note. Si l'élément est déjà une note alors aucun changement est réalisé.</li>
+			</ul>
+		</ul>
+
+		<h1>Filtrer les projets</h1>
+		<ul>
+			<li><span id="entete">Syntaxe</span> : <span id="cmd">f [+/-][@Projects]</span></li>
+			<li><span id="entete">Description</span> : Adjuste le filtre d'affichage.</li>
+			<li><span id="entete">Paramètres</span> :</li>
+			<ul>
+				<li><span id="cmd">[+/-][@Projects]</span> : "+" ou aucun signe, ajoute un projet au filtre d'affichage. "-" supprime un projet au filtre d'affichage. Pour filter les éléments globaux utilisez "global" comme nom de projet.</li>
+				<ul>
+					<li>Optionnel: non</li>
+				</ul>
+			</ul>
+			<li><span id="entete">Exemples</span> :</li>
+			<ul>
+				<li><span id="cmd">f @prj1</span>: Ajoute le projet "prj1" au filtre d'affichage. Les éléments de "prj1" sont affichés.</li>
+				<li><span id="cmd">f +@prj1</span>: Ajoute le projet "prj1" au filtre d'affichage. Les éléments de "prj1" sont affichés.</li>
+				<li><span id="cmd">f @prj1 @prj2</span>: Ajoute les projets "prj1" et "prj2" au filtre d'affichage. Les éléments de "prj1" et "prj2" sont affichés.</li>
+				<li><span id="cmd">f -@prj1</span>: Supprime le projet "prj1" du filtre d'affichage. Les éléments de "prj1" sont cachés.</li>
+				<li><span id="cmd">f -@prj1 -@prj2</span>: Supprime les projets "prj1" et "prj2" du filtre d'affichage. Les éléments de "prj1" et "prj2" sont cachés.</li>
+				<li><span id="cmd">f +@prj1 -@prj2</span>: Ajoute le projet "prj1" au filtre d'affichage. Supprime "prj2" du filtre d'affichage. Les éléments de "prj1" sont affichés et les éléments de "prj2" sont cachés.</li>
+				<li><span id="cmd">f -@global</span>: Supprime les éléments globaux du filtre d'affichage.</li>
+			</ul>
+		</ul>
+
+		<h1>Cache tous les projets</h1>
+		<ul>
+			<li><span id="entete">Syntaxe</span> : <span id="cmd">f--</span></li>
+			<li><span id="entete">Description</span> : Cache tous les projets.</li>
+			<li><span id="entete">Exemples</span> :</li>
+			<ul>
+				<li><span id="cmd">f--</span>: Cache tous les éléments de tous les projets.</li>
+			</ul>
+		</ul>
+
+		<h1>Montre tous les projets</h1>
+		<ul>
+			<li><span id="entete">Syntaxe</span> : <span id="cmd">f++</span></li>
+			<li><span id="entete">Description</span> : Montre tous les projets.</li>
+			<li><span id="entete">Exemples</span> :</li>
+			<ul>
+				<li><span id="cmd">f++</span>: Montre tous les éléments de tous les projets.</li>
+			</ul>
+		</ul>
+
+		<h1>Affichage chronologique</h1>
+		<ul>
+			<li><span id="entete">Syntaxe</span> : <span id="cmd">h</span></li>
+			<li><span id="entete">Description</span> : Sélectionne l'affichage chronologique.</li>
+			<li><span id="entete">Exemples</span> :</li>
+			<ul>
+				<li><span id="cmd">h</span>: Sélection l'affichage chronologique.</li>
+			</ul>
+		</ul>
+
+		<h1>Affichage projets</h1>
+		<ul>
+			<li><span id="entete">Syntaxe</span> : <span id="cmd">p</span></li>
+			<li><span id="entete">Description</span> : Sélectionne l'affichage projet.</li>
+			<li><span id="entete">Exemples</span> :</li>
+			<ul>
+				<li><span id="cmd">p</span>: Sélectionne l'affichage des l'éléments regroupés par projet.</li>
+			</ul>
+		</ul>
+
+	</body>
+</html>

@@ -28,6 +28,11 @@ type
       modkey : word;
       key : word;
       LastDir : string;
+      WindowW : integer; //-1 : default width
+      WindowH : integer; //-1 : default height
+      WindowL : integer; //-1 : default left pos
+      WindowT : integer; //-1 : default top pos
+      pnChecksWidth : integer;
       Procedure SaveConfig();
       Procedure LoadConfig();
   end;
@@ -47,6 +52,11 @@ begin
   WeekChar:='S';
   DateOrder:=DATE_DMY;
   LastDir:='';
+  pnChecksWidth:=120;
+  WindowW:=-1;
+  WindowH:=-1;
+  WindowT:=-1;
+  WindowL:=-1;
 end;
 
 
@@ -63,6 +73,11 @@ begin
   f.WriteInteger('Main', 'DateOrder', DateOrder);
   f.WriteInteger('Main', 'Modkey', modkey);
   f.WriteInteger('Main', 'Key', key);
+  f.WriteInteger('Main', 'pnChecksWidth',pnChecksWidth);
+  f.WriteInteger('Main', 'WindowW',WindowW);
+  f.WriteInteger('Main', 'WindowH',WindowH);
+  f.WriteInteger('Main', 'WindowT',WindowT);
+  f.WriteInteger('Main', 'WindowL',WindowL);
 
   f.WriteBool('Main','ConfirmDeleteItem',ConfirmDeleteItem);
   f.WriteBool('Main','ConfirmDeleteProject',ConfirmDeleteProject);
@@ -90,6 +105,12 @@ begin
   DateOrder:= f.ReadInteger('Main', 'DateOrder', DATE_DMY);
   Modkey:= word(f.ReadInteger('Main', 'Modkey', 0));
   key:= word(f.ReadInteger('Main', 'Key', 0));
+  pnChecksWidth:= f.ReadInteger('Main', 'pnChecksWidth', 120);
+  WindowW:= f.ReadInteger('Main', 'WindowW', -1);
+  WindowH:= f.ReadInteger('Main', 'WindowH', -1);
+  WindowT:= f.ReadInteger('Main', 'WindowT', -1);
+  WindowL:= f.ReadInteger('Main', 'WindowL', -1);
+
 
   ConfirmDeleteItem:=f.ReadBool('Main', 'ConfirmDeleteItem', true);
   ConfirmDeleteProject:=f.ReadBool('Main', 'ConfirmDeleteProject', true);

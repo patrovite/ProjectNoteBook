@@ -11,12 +11,8 @@ Currently:
 
 Todo:
 * add an undo command. Store deleted data in an backup table?
-* export as hmtl with no javascript (todo?)
 * macro (m macro_name) macro store in database
-* help as html (replace the list)
-* Memorize split position
-* Memorize window size
-* Memorize window position
+* Test project name syntaxe
 -------------------------------------------------------------------------------}
 
 unit frmMain;
@@ -27,7 +23,7 @@ interface
 
 uses
   Classes, SysUtils, sqlite3conn, FileUtil, Forms, Controls, Graphics, Dialogs,
-  StdCtrls, Menus, ExtCtrls, ComCtrls, CheckLst, LCLType,
+  StdCtrls, Menus, ExtCtrls, ComCtrls, CheckLst, LCLType, ActnList,
   HtmlView, utils, items, projects, utils_date, DateUtils, constantes, tokens,
   datamodule, configuration, dlgconfig, windows, inifiles, exportHtmlJS, history;
 
@@ -42,6 +38,7 @@ const
   DBFILE = '.\pnb.db';
   PRE_FILE = '.\template_pre.html';
   POST_FILE = '.\template_post.html';
+  HELP_FILE = '.\help_%s.html';
   VERSION = '1.00alpha';
   GLOBAL = 'global';
 
@@ -50,16 +47,22 @@ type
 
   { Tmain }
   Tmain = class(TForm)
+    actHelp: TAction;
+    actTimelineMode: TAction;
+    actProjectsMode: TAction;
+    ActionList: TActionList;
     ApplicationProperties: TApplicationProperties;
     ChklstProject: TCheckListBox;
     CtrlbMain: TControlBar;
     fpnMain: TFlowPanel;
     HtmlView: THtmlViewer;
     edCommandLine: TLabeledEdit;
-    ImageListMenu: TImageList;
-    ImageListToolbar: TImageList;
+    ImageList: TImageList;
+    ImageListActions: TImageList;
     ImageListTbaCheck: TImageList;
     MainMenu: TMainMenu;
+    mnuDisplayHelp: TMenuItem;
+    mnuHelp: TMenuItem;
     mnuSettings: TMenuItem;
     MenuItem2: TMenuItem;
     mnuDisplayTimeline: TMenuItem;
@@ -88,6 +91,9 @@ type
     tbDisplayTimeline: TToolButton;
     TrayIcon: TTrayIcon;
 
+    procedure actHelpExecute(Sender: TObject);
+    procedure actProjectsModeExecute(Sender: TObject);
+    procedure actTimelineModeExecute(Sender: TObject);
     procedure ApplicationPropertiesMinimize(Sender: TObject);
     procedure ChklstProjectClickCheck(Sender: TObject);
     procedure edCommandLineKeyUp(Sender: TObject; var Key: Word;
@@ -113,7 +119,6 @@ type
     NbNote: integer;
     NbTask: integer;
     NbActiveTask: integer;
-    //DisplayMode: integer;
     StrListPre: TStringList;
     StrListPost: TStringList;
     config : TConfig;
@@ -126,7 +131,7 @@ type
     strCommandLine : String;
     errnum: integer;
     history : THistory;
-
+    isHelpActive : boolean;
     Error_STR : array[1..NB_ERROR] of string;
     strHELP_E:string;
     strHELP_T:string;
@@ -231,9 +236,21 @@ begin
   end;
 
   RequestToClose:=false;
+  isHelpActive:=false;
 
-  //-- Load the configuration file
+  //-- Load the configuration file and adjust some parameters
   Config.LoadConfig();
+  pnChecks.Width:=config.pnChecksWidth;
+  if  (config.WindowW>0) and
+      (config.WindowH>0) and
+      (config.WindowT>0) and
+      (config.WindowL>0) then begin
+    Position:=poDesigned;
+    Width:=config.WindowW;
+    Height:=config.WindowH;
+    Top:=config.WindowT;
+    Left:=config.WindowL;
+  end;
 
   //-- Load Translate file
   Translate();
@@ -273,6 +290,12 @@ end;
 //------------------------------------------------------------------------------
 procedure Tmain.FormClose(Sender: TObject; var CloseAction: TCloseAction);
 begin
+  //-- Save the configuration
+  config.pnChecksWidth:=pnChecks.Width;
+  config.WindowW:=Width;
+  config.WindowH:=Height;
+  config.WindowT:=Top;
+  config.WindowL:=Left;
   Config.SaveConfig();
 end;
 
@@ -361,11 +384,11 @@ Begin
   Application.ShowMainForm:=true;
   ShowInTaskBar:=stDefault;
   Show();
+  WindowState:=LastWindowState;
   Top:=memTop;
   Left:=memLeft;
   Width:=memWidth;
   Height:=memHeight;
-  WindowState:=LastWindowState;
 end;
 
 
@@ -414,10 +437,33 @@ end;
 procedure Tmain.ApplicationPropertiesMinimize(Sender: TObject);
 begin
   if Config.HideOnMinimize Then ReduceToTray();
-  //memTop:=Top;
-  //memLeft:=Left;
-  //memWidth:=Width;
-  //memHeight:=Height;
+end;
+
+//------------------------------------------------------------------------------
+procedure Tmain.actHelpExecute(Sender: TObject);
+begin
+  isHelpActive:=true;
+  RefreshItemsList();
+end;
+
+
+//------------------------------------------------------------------------------
+procedure Tmain.actProjectsModeExecute(Sender: TObject);
+begin
+  isHelpActive:=false;
+  Config.DisplayMode := DISPLAY_PROJECTS;
+  Refresh_Display_Mode();
+  Refresh();
+end;
+
+
+//------------------------------------------------------------------------------
+procedure Tmain.actTimelineModeExecute(Sender: TObject);
+begin
+  isHelpActive:=false;
+  Config.DisplayMode := DISPLAY_TIMELINE;
+  Refresh_Display_Mode();
+  Refresh();
 end;
 
 
@@ -490,114 +536,119 @@ var
   lastProject : string;
   lastDate : TDateTime;
 begin
-  sList := TStringList.Create();
-  mem := TMemoryStream.Create();
+  if isHelpActive then begin //Help display
+    HtmlView.LoadFromFile(format(HELP_FILE,[config.Lang]));
+  end
+  else begin  //Items display
+    sList := TStringList.Create();
+    mem := TMemoryStream.Create();
 
-  //-- Add the begin of the html page
-  sList.AddStrings(StrListPre, False);
+    //-- Add the begin of the html page
+    sList.AddStrings(StrListPre, False);
 
-  lastDate:=-1; //unused value
-  lastProject:='%µ£';  //unused value
-  sbr:='';
-  //-- Add the content
-  for i := 0 to itemList.Count - 1 do
-  begin
-    item := PItem(itemList.Items[i]);
-
-    if Config.DisplayMode=DISPLAY_PROJECTS then begin
-      if lastProject<>item^.project then begin
-        if item^.project='' then
-          sd:=GLOBAL
-        else
-          sd:=item^.project;
-        sList.Add('<tr>');
-        sList.Add(' <td colspan="4">'+sbr+'<span id="title">'+sd+'</span></td>');
-        sList.Add('</tr>');
-        lastProject:=item^.project;
-        sbr:='<br/>';
-      end;
-    end
-    else if Config.DisplayMode=DISPLAY_TIMELINE then begin
-      if lastDate<>item^.endDate then begin
-        if item^.endDate=0 then
-          sd:='Sans date de fin'
-        else
-          sd:=FormatDateTime('dddd dd mmmm yyyy',item^.endDate);
-        //--
-        sList.Add('<tr>');
-        sList.Add(' <td colspan="4">'+sbr+'<span id="title">'+sd+'</span></td>');
-        sList.Add('</tr>');
-        lastDate:=item^.endDate;
-        sbr:='<br/>';
-      end;
-    end;
-
-    //-- Notes
-    if item^.itemType = ITEM_NOTE then
+    lastDate:=-1; //unused value
+    lastProject:='%µ£';  //unused value
+    sbr:='';
+    //-- Add the content
+    for i := 0 to itemList.Count - 1 do
     begin
-      sp:=IntToStr(item^.priority);
+      item := PItem(itemList.Items[i]);
 
-      sList.Add('<tr>');
-      sList.Add(' <td>&nbsp&nbsp</td>');
-      sList.Add(' <td align="right" valign="top"><span id="num">' + IntToStr(i + 1) + '. </span></td>');
-
-      if (item^.project <> '') and (config.DisplayMode=DISPLAY_TIMELINE) then
-        sList.Add(' <td valign="top"><span id="logo0">&#33</span>&nbsp<span id="text' + sp + '">' + item^.Text +
-          '</span>&nbsp<span id="project">&nbsp' +
-          item^.project + '&nbsp</span></td>')
-      else
-        sList.Add(' <td><span id="logo0">&#33</span>&nbsp<span id="text'+sp+'">' + item^.Text + '</span></td>');
-
-      sList.Add('</tr>');
-    end
-    //-- Tasks
-    else if item^.itemType = ITEM_TASK then
-    begin
-      if item^.progress<>100 then begin
-        sp:=IntToStr(item^.priority);
-        sl:='<span id="logo0">&#163</span>&nbsp';
+      if Config.DisplayMode=DISPLAY_PROJECTS then begin
+        if lastProject<>item^.project then begin
+          if item^.project='' then
+            sd:=UpCaseFirstChar(GLOBAL)
+          else
+            sd:=UpCaseFirstChar(item^.project);
+          sList.Add('<tr>');
+          sList.Add(' <td colspan="4">'+sbr+'<span id="title">'+sd+'</span></td>');
+          sList.Add('</tr>');
+          lastProject:=item^.project;
+          sbr:='<br/>';
+        end;
       end
-      else begin
-        sp:='3'; //Finished>Green
-        sl:='<span id="logo1">&#82</span>&nbsp';
+      else if Config.DisplayMode=DISPLAY_TIMELINE then begin
+        if lastDate<>item^.endDate then begin
+          if item^.endDate=0 then
+            sd:='Sans date de fin'
+          else
+            sd:=UpCaseFirstChar(FormatDateTime('dddd dd mmmm yyyy',item^.endDate));
+          //--
+          sList.Add('<tr>');
+          sList.Add(' <td colspan="4">'+sbr+'<span id="title">'+sd+'</span></td>');
+          sList.Add('</tr>');
+          lastDate:=item^.endDate;
+          sbr:='<br/>';
+        end;
       end;
 
-      sList.Add('<tr>');
-      sList.Add(' <td>&nbsp&nbsp</td>');
-      sList.Add(' <td align="right" valign="top"><span id="num">' + IntToStr(i + 1) + '. </span></td>');
+      //-- Notes
+      if item^.itemType = ITEM_NOTE then
+      begin
+        sp:=IntToStr(item^.priority);
 
-      if (item^.project <> '') and (config.DisplayMode=DISPLAY_TIMELINE) then
-        sList.Add(' <td valign="top">'+sl+'<span id="text' + sp + '">' + item^.Text +
-          '</span>&nbsp<span id="project">&nbsp' +
-          item^.project + '&nbsp</span></td>')
-      else
-        sList.Add(' <td>'+sl+'<span id="text'+ sp +'">' + item^.Text + '</span></td>');
+        sList.Add('<tr>');
+        sList.Add(' <td>&nbsp&nbsp</td>');
+        sList.Add(' <td align="right" valign="top"><span id="num">' + IntToStr(i + 1) + '. </span></td>');
 
-      sList.Add('</tr>');
-      sList.Add('<tr>');
-      sList.Add(' <td></td>');
-      sList.Add(' <td></td>');
+        if (item^.project <> '') and (config.DisplayMode=DISPLAY_TIMELINE) then
+          sList.Add(' <td valign="top"><span id="logo0">&#33</span>&nbsp<span id="text' + sp + '">' + item^.Text +
+            '</span>&nbsp<span id="project">&nbsp' +
+            item^.project + '&nbsp</span></td>')
+        else
+          sList.Add(' <td><span id="logo0">&#33</span>&nbsp<span id="text'+sp+'">' + item^.Text + '</span></td>');
 
-      s := FormatDateTimeEx(ToFormatDate(config.DateOrder), item^.endDate);
-      if (s <> '') and (config.DisplayMode=DISPLAY_PROJECTS) then
-        s := ' >' + s
-      else
-        s:='';
+        sList.Add('</tr>');
+      end
+      //-- Tasks
+      else if item^.itemType = ITEM_TASK then
+      begin
+        if item^.progress<>100 then begin
+          sp:=IntToStr(item^.priority);
+          sl:='<span id="logo0">&#163</span>&nbsp';
+        end
+        else begin
+          sp:='3'; //Finished>Green
+          sl:='<span id="logo1">&#82</span>&nbsp';
+        end;
 
-      sList.Add(' <td><span id="info">' + IntToStr(item^.progress) + '%' + s + '</span></td>');
-      sList.Add('</tr>');
+        sList.Add('<tr>');
+        sList.Add(' <td>&nbsp&nbsp</td>');
+        sList.Add(' <td align="right" valign="top"><span id="num">' + IntToStr(i + 1) + '. </span></td>');
+
+        if (item^.project <> '') and (config.DisplayMode=DISPLAY_TIMELINE) then
+          sList.Add(' <td valign="top">'+sl+'<span id="text' + sp + '">' + item^.Text +
+            '</span>&nbsp<span id="project">&nbsp' +
+            item^.project + '&nbsp</span></td>')
+        else
+          sList.Add(' <td>'+sl+'<span id="text'+ sp +'">' + item^.Text + '</span></td>');
+
+        sList.Add('</tr>');
+        sList.Add('<tr>');
+        sList.Add(' <td></td>');
+        sList.Add(' <td></td>');
+
+        s := FormatDateTimeEx(ToFormatDate(config.DateOrder), item^.endDate);
+        if (s <> '') and (config.DisplayMode=DISPLAY_PROJECTS) then
+          s := ' >' + s
+        else
+          s:='';
+
+        sList.Add(' <td><span id="info">' + IntToStr(item^.progress) + '%' + s + '</span></td>');
+        sList.Add('</tr>');
+      end;
     end;
+
+    //-- Add the end of the html page
+    sList.AddStrings(StrListPost, False);
+
+    //-- Transfer to the html viewer
+    sList.SaveToStream(mem);
+    HtmlView.LoadFromStream(mem);
+
+    mem.Free();
+    sList.Free();
   end;
-
-  //-- Add the end of the html page
-  sList.AddStrings(StrListPost, False);
-
-  //-- Transfer to the html viewer
-  sList.SaveToStream(mem);
-  HtmlView.LoadFromStream(mem);
-
-  mem.Free();
-  sList.Free();
 end;
 
 
@@ -914,8 +965,10 @@ begin
   for i := 2 to n do
   begin
     //-- [@]
-    if token[i][1] = '@' then
-      sProject := sProject + token[i]
+    if token[i][1] = '@' then begin
+      if LowerCase(token[i])<>'@global' then
+        sProject := sProject + token[i];
+    end
     //-- [Px]
     else if Lowercase(token[i][1]) = 'p' then
     begin
@@ -1068,8 +1121,10 @@ begin
   for i := 2 to n do
   begin
     //-- [@]
-    if token[i][1] = '@' then
-      sProject := sProject + token[i]
+    if token[i][1] = '@' then begin
+      if LowerCase(token[i])<>'@global' then
+        sProject := sProject + token[i];
+    end
     //-- [Px]
     else if Lowercase(token[i][1]) = 'p' then
     begin
@@ -2096,16 +2151,23 @@ Begin
   mnuQuit.Caption:=ReadLng(f,'MENU','MNUQUIT');
 
   mnuDisplay.Caption:=ReadLng(f,'MENU','MNUDISPLAY');
-  mnuDisplayProjects.Caption:=ReadLng(f,'MENU','MNUDISPLAYPROJECTS');
-  mnuDisplayTimeline.Caption:=ReadLng(f,'MENU','MNUDISPLAYTIMELINE');
+
+  mnuHelp.Caption:=ReadLng(f,'MENU','MNUHELP');
+
+  //Actions
+  actProjectsMode.Caption:=ReadLng(f,'ACTION','ACTDISPLAYPROJECTS_CAPTION');
+  actProjectsMode.Hint:=ReadLng(f,'ACTION','ACTDISPLAYPROJECTS_HINT');
+
+  actTimelineMode.Caption:=ReadLng(f,'ACTION','ACTDISPLAYTIMELINE_CAPTION');
+  actTimelineMode.Hint:=ReadLng(f,'ACTION','ACTDISPLAYTIMELINE_HINT');
+
+  actHelp.Caption:=ReadLng(f,'ACTION','ACTHELP_CAPTION');
 
   //-- Main
   stItems.Caption:=ReadLng(f,'MAIN','STITEMS');
   stNote.Caption:=ReadLng(f,'MAIN','STNOTE');
   stTaskActive.Caption:=ReadLng(f,'MAIN','STTASKACTIVE');
 
-  tbDisplayProjects.Hint:=ReadLng(f,'MAIN','TBDISPLAYPROJECTS_HINT');
-  tbDisplayTimeline.Hint:=ReadLng(f,'MAIN','TBDISPLAYTIMELINE_HINT');
   tbAll.Hint:=ReadLng(f,'MAIN','TBALL_HINT');
   tbNone.Hint:=ReadLng(f,'MAIN','TBNONE_HINT');
   edCommandLine.EditLabel.Caption:=ReadLng(f,'MAIN','EDCOMMANDLINE');

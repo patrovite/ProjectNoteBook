@@ -27,6 +27,7 @@ const
 
   Function LR_Trim(s:String):String;
   Function RemoveSpecialChar(s:String):String;
+  function UpCaseFirstChar(const S: string): string;
 
   Function DecodeEffort(s:String; HourPerDay, DayPerWeek:integer; Var effs:string; Var effi:Integer; calc:Boolean):Boolean;
 
@@ -53,6 +54,15 @@ begin
     else if v=DATE_YMD then result:='YYYY MMM DD'
     else result:='DD MMM YYYY';
   end;
+end;
+
+//------------------------------------------------------------------------------
+function UpCaseFirstChar(const S: string): string;
+begin
+ Result := S;
+
+ if Length(Result) > 0 then
+ Result[1] := UpCase(Result[1]);
 end;
 
 

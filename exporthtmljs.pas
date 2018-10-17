@@ -87,9 +87,9 @@ begin
       if Config.DisplayMode=DISPLAY_PROJECTS then begin
         if lastProject<>item^.project then begin
           if item^.project='' then
-            sd:= stGlobal
+            sd:= UpCaseFirstChar(stGlobal)
           else
-            sd:=item^.project;
+            sd:=UpCaseFirstChar(item^.project);
           inc(sc);
           if first=false then begin
             writeln(f, '          </ul>');
@@ -106,7 +106,7 @@ begin
           if item^.endDate=0 then
             sd:='Sans date de fin'
           else
-            sd:=FormatDateTime('dddd dd mmmm yyyy',item^.endDate);
+            sd:=UpCaseFirstChar(FormatDateTime('dddd dd mmmm yyyy',item^.endDate));
           //--
           inc(sc);
           if first=false then begin

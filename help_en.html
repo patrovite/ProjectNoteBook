@@ -1,0 +1,385 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<STYLE TYPE="text/css">
+			body {
+				background-color: #3C3C3C;
+			}
+			UNKNOWN
+			{
+				 FONT-FAMILY: Verdana;
+				 BACKGROUND-COLOR: white;
+			}
+			H1
+			{
+				font-weight: normal;
+				font-size: 100%;
+				color: #BB6F6B;/*tomato;*/
+				font-family: Verdana;
+			}
+			li {
+				color: white;
+				font-family: Verdana;
+			}
+			#entete {
+				color: #FCBC80;/*deepskyblue;*/
+				font-weight: normal;
+				font-family: Verdana;
+			}
+			#cmd {
+				color: #F7E29C; /*powderblue;*/
+				font-weight: normal;
+				font-family: Verdana;
+				font-style: italic;
+			}
+
+		</STYLE>
+		<title>ProjectNoteBook help</title>
+	</head>
+	<body>
+
+		<h1>Create task</h1>
+		<ul>
+			<li><span id="entete">Syntaxe</span> : <span id="cmd">t [@projects] [Px] [>x] [%x] [%e] Text</span></li>
+			<li><span id="entete">Description</span> : Create a task item.</li>
+			<li><span id="entete">Parameters</span> :</li>
+			<ul>
+				<li><span id="cmd">[@projects]</span> : "@" followed by a project name. No space or tab characters in the project name.</li>
+				<ul>
+					<li>Optional: yes</li>
+					<li>Default: If no project is declare the task will be global.</li>
+					<li>example:  @project1</li>
+				</ul>
+				<li><span id="cmd">[Px]</span> : Priority. "x" is the level of priority. Value between 0 and 2. 0:Normal. 1:Average. 2:High</li>
+				<ul>
+					<li>Optional: yes</li>
+					<li>Default: 0 (Normal)</li>
+					<li>example: p0</li>
+				</ul>
+				<li><span id="cmd">[>x]</span> : End date. The date format depend of the application settings.</li>
+				<ul>
+					<li>Optional: yes</li>
+					<li>Default: No end date</li>
+					<li>examples:<br> 
+						&gt;12 : 12th of the current month of the current year<br>
+						&gt;12/02 : 12/02 of the current year<br>
+						&gt;12/02/18 : 12/02/2018<br>
+						&gt;12/02/2018<br>
+						&gt;W12 : Start of the week 12 (first worked day of the week of the current year)<br>
+						&gt;&lt;W12 : End of the week 12 (last worked day of the week of the current year)<br>
+						&gt;W12/11 : Start of the week 12 (first worked day of the week of the current year)<br>
+						&gt;&lt;W12/18 : End of the week 12 (last worked day of the week of the current year)<br>
+						&gt;W12/2018 : Start of the week 12 (first worked day of the week of the current year)<br>
+						&gt;&lt;W12/2018 : End of the week 12 (last worked day of the week of the current year)<br>
+					</li>
+				</ul>
+				<li><span id="cmd">[%x]</span> : Progress percentage. Value between 0 and 100.</li>
+				<ul>
+					<li>Optional: yes</li>
+					<li>Default: 0%</li>
+					<li>example: %50 (50%)</li>
+				</ul>
+				<li><span id="cmd">[%e]</span> : Task finished. Set the progress percentage to 100%.</li>
+				<ul>
+					<li>Optional: yes</li>
+					<li>Default: No modification</li>
+					<li>example: %e</li>
+				</ul>
+				<li><span id="cmd">Text</span> : Task text.</li>
+				<ul>
+					<li>Optional: no</li>
+				</ul>
+			</ul>
+			<li><span id="entete">Examples</span> :</li>
+			<ul>
+				<li><span id="cmd">t @project1 p1 %25 write the application</span>: This create a task for "project1" with a priority 1 (average), a progress of 25% and the text "write the application"</li>
+				<li><span id="cmd">t p2 fix the problem</span>: This create a "global" task with a priority of 2 (high), a progress of 0% (default) and the text "fix the problem"</li>
+				<li><span id="cmd">t @prj1 @prj2 @prj3 fix the problem</span>: This create a task for the project "prj1", "prj2" and "prj3" with a priority of 0 (normal, default), a progress of 0% (default) and the text "fix the problem"</li>
+			</ul>
+
+		</ul>
+
+		<h1>Create note</h1>
+		<ul>
+			<li><span id="entete">Syntaxe</span> : <span id="cmd">n [@projects] [Px] Text</span></li>
+			<li><span id="entete">Description</span> : Create a note item.</li>
+			<li><span id="entete">Parameters</span> :</li>
+			<ul>
+				<li><span id="cmd">[@projects]</span> : "@" followed by a project name. No space or tab characters in the project name.</li>
+				<ul>
+					<li>Optional: yes</li>
+					<li>Default: If no project is declare the task will be global.</li>
+					<li>example:  @project1</li>
+				</ul>
+				<li><span id="cmd">[Px]</span> : Priority. "x" is the level of priority. Value between 0 and 2. 0:Normal. 1:Average. 2:High</li>
+				<ul>
+					<li>Optional: yes</li>
+					<li>Default: 0 (Normal)</li>
+					<li>example: p0</li>
+				</ul>
+				<li><span id="cmd">Text</span> : Note text.</li>
+				<ul>
+					<li>Optional: no</li>
+				</ul>
+			</ul>
+			<li><span id="entete">Examples</span> :</li>
+			<ul>
+				<li><span id="cmd">n @project1 p1 This is a note</span>: This create a note for "project1" with a priority 1 (average) and the text "This is a note"</li>
+				<li><span id="cmd">n The sky is blue</span>: This create a "global" note with a priority of 0 and the text "The sky is blue"</li>
+				<li><span id="cmd">n @prj1 @prj2 @prj3 The color is blue</span>: This create a note for the projects "prj1", "prj2" and "prj3" with a priority of 0 (normal, default) and the text "The color is blue"</li>
+			</ul>
+		</ul>
+
+		<h1>Edit item</h1>
+		<ul>
+			<li><span id="entete">Syntaxe</span> : <span id="cmd">e num</span></li>
+			<li><span id="entete">Description</span> : Copy the content of item "num" in the command line in order to be edited. Once the edition is finished press ENTER. The syntaxe is the same as the edited item (note or task)</li>
+			<li><span id="entete">Parameters</span> :</li>
+			<ul>
+				<li><span id="cmd">num</span> : Item number.</li>
+				<ul>
+					<li>Optional: no</li>
+					<li>Default: </li>
+					<li>example: e 5 (Edit item number 5)</li>
+				</ul>
+			</ul>
+			<li><span id="entete">Examples</span> :</li>
+			<ul>
+				<li><span id="cmd">e 5</span>: This command display the content of the item 5. Edit the content and press ENTER to update the item</li>
+			</ul>
+		</ul>
+
+		<h1>Edit item</h1>
+		<ul>
+			<li><span id="entete">Syntaxe</span> : <span id="cmd">e num [@projects] [Px] [>x] [%x] [%e] [Text]</span></li>
+			<li><span id="entete">Description</span> : Update item "num" with the parameters in the command line.</li>
+			<li><span id="entete">Parameters</span> :</li>
+			<ul>
+				<li><span id="cmd">num</span> : Item number to edit.</li>
+				<ul>
+					<li>Optional: no</li>
+				</ul>
+				<li><span id="cmd">[@projects]</span> : "@" followed by a project name. No space or tab characters in the project name.</li>
+				<ul>
+					<li>Optional: yes</li>
+					<li>Default: If no project is declare the task will be global.</li>
+					<li>example:  @project1</li>
+				</ul>
+				<li><span id="cmd">[Px]</span> : Priority. "x" is the level of priority. Value between 0 and 2. 0:Normal. 1:Average. 2:High</li>
+				<ul>
+					<li>Optional: yes</li>
+					<li>Default: 0 (Normal)</li>
+					<li>example: p0</li>
+				</ul>
+				<li><span id="cmd">[>x]</span> : End date. The date format depend of the application settings.</li>
+				<ul>
+					<li>Optional: yes</li>
+					<li>Default: No end date</li>
+					<li>examples:<br> 
+						&gt;12 : 12th of the current month of the current year<br>
+						&gt;12/02 : 12/02 of the current year<br>
+						&gt;12/02/18 : 12/02/2018<br>
+						&gt;12/02/2018<br>
+						&gt;W12 : Start of the week 12 (first worked day of the week of the current year)<br>
+						&gt;&lt;W12 : End of the week 12 (last worked day of the week of the current year)<br>
+						&gt;W12/11 : Start of the week 12 (first worked day of the week of the current year)<br>
+						&gt;&lt;W12/18 : End of the week 12 (last worked day of the week of the current year)<br>
+						&gt;W12/2018 : Start of the week 12 (first worked day of the week of the current year)<br>
+						&gt;&lt;W12/2018 : End of the week 12 (last worked day of the week of the current year)<br>
+					</li>
+				</ul>
+				<li><span id="cmd">[%x]</span> : Progress percentage. Value between 0 and 100.</li>
+				<ul>
+					<li>Optional: yes</li>
+					<li>Default: 0%</li>
+					<li>example: %50 (50%)</li>
+				</ul>
+				<li><span id="cmd">[%e]</span> : Task finished. Set the progress percentage to 100%.</li>
+				<ul>
+					<li>Optional: yes</li>
+					<li>Default: No modification</li>
+					<li>example: %e</li>
+				</ul>
+				<li><span id="cmd">Text</span> : Text.</li>
+				<ul>
+					<li>Optional: yes. No modification if missing</li>
+				</ul>
+			</ul>
+			<li><span id="entete">Examples</span> :</li>
+			<ul>
+				<li><span id="cmd">e 5 @prj2</span>: On item 5, change the project name to "prj2"</li>
+				<li><span id="cmd">e 5 p1</span>: On item 5, change the priority to 1 (average)</li>
+				<li><span id="cmd">e 5 %25</span>: On item 5, change the progress percentage to 25%</li>
+				<li><span id="cmd">e 5 >19/11/18</span>: On item 5, change the endate</li>
+				<li><span id="cmd">e 5 New text</span>: On item 5, change the text</li>
+				<li><span id="cmd">e 5 @prj2 %25 p2 new text</span>: On item 5, change different parameter</li>
+			</ul>
+		</ul>
+
+		<h1>Edit project</h1>
+		<ul>
+			<li><span id="entete">Syntaxe</span> : <span id="cmd">e @project new_project_name</span></li>
+			<li><span id="entete">Description</span> : Rename a project</li>
+			<li><span id="entete">Parameters</span> :</li>
+			<ul>
+				<li><span id="cmd">@project</span> : Project name starting with "@"</li>
+				<ul>
+					<li>Optional: no</li>
+					<li>Default: </li>
+				</ul>
+				<li><span id="cmd">new_project_name</span> : New project name</li>
+				<ul>
+					<li>Optional: no</li>
+				</ul>
+			</ul>
+			<li><span id="entete">Examples</span> :</li>
+			<ul>
+				<li><span id="cmd">e @project1 project2</span>: Rename "project1" to "project2". This will update all items containing "project1"</li>
+			</ul>
+		</ul>
+
+		<h1>Delete item</h1>
+		<ul>
+			<li><span id="entete">Syntaxe</span> : <span id="cmd">d num</span></li>
+			<li><span id="entete">Description</span> : delete an item</li>
+			<li><span id="entete">Parameters</span> :</li>
+			<ul>
+				<li><span id="cmd">num</span> : Item number to delete</li>
+				<ul>
+					<li>Optional: no</li>
+				</ul>
+			</ul>
+			<li><span id="entete">Examples</span> :</li>
+			<ul>
+				<li><span id="cmd">d 5</span>: Delete the item number 5</li>
+			</ul>
+		</ul>
+
+		<h1>Delete project</h1>
+		<ul>
+			<li><span id="entete">Syntaxe</span> : <span id="cmd">d @project</span></li>
+			<li><span id="entete">Description</span> : delete a project and all its items</li>
+			<li><span id="entete">Parameters</span> :</li>
+			<ul>
+				<li><span id="cmd">num</span> : Item number to delete</li>
+				<ul>
+					<li>Optional: no</li>
+				</ul>
+			</ul>
+			<li><span id="entete">Examples</span> :</li>
+			<ul>
+				<li><span id="cmd">d @project1</span>: Delete all the items where the project name is "project1"</li>
+			</ul>
+		</ul>
+
+		<h1>Copy item</h1>
+		<ul>
+			<li><span id="entete">Syntaxe</span> : <span id="cmd">c num [@project]</span></li>
+			<li><span id="entete">Description</span> : Copy an item in project. If no project in mentioned then item is copied in the same project.</li>
+			<li><span id="entete">Parameters</span> :</li>
+			<ul>
+				<li><span id="cmd">num</span> : Item number to copy</li>
+				<ul>
+					<li>Optional: no</li>
+				</ul>
+				<li><span id="cmd">@project</span> : Project name starting with "@"</li>
+				<ul>
+					<li>Optional: no</li>
+					<li>Default: Same project</li>
+				</ul>
+			</ul>
+			<li><span id="entete">Examples</span> :</li>
+			<ul>
+				<li><span id="cmd">c 5 @project1</span>: Copy item number 5 to the project "project1"</li>
+				<li><span id="cmd">c 5</span>: Copy item number 5 in the same project as item 5</li>
+			</ul>
+		</ul>
+
+		<h1>Convert task&lt;-&gt;note</h1>
+		<ul>
+			<li><span id="entete">Syntaxe</span> : <span id="cmd">x num n/t</span></li>
+			<li><span id="entete">Description</span> : Convert an item as note or task.</li>
+			<li><span id="entete">Parameters</span> :</li>
+			<ul>
+				<li><span id="cmd">num</span> : Item number to convert</li>
+				<ul>
+					<li>Optional: no</li>
+				</ul>
+				<li><span id="cmd">n or t</span> : "n" convert item as a note. "t" convert item as a "task".</li>
+				<ul>
+					<li>Optional: no</li>
+				</ul>
+			</ul>
+			<li><span id="entete">Examples</span> :</li>
+			<ul>
+				<li><span id="cmd">x 5 t</span>: Convert item number 5 to task. If it's already a task then no change is done.</li>
+				<li><span id="cmd">x 5 n</span>: Convert item number 5 to note. If it's already a note then no change is done.</li>
+			</ul>
+		</ul>
+
+		<h1>Filter projects</h1>
+		<ul>
+			<li><span id="entete">Syntaxe</span> : <span id="cmd">f [+/-][@Projects]</span></li>
+			<li><span id="entete">Description</span> : Set the project filter.</li>
+			<li><span id="entete">Parameters</span> :</li>
+			<ul>
+				<li><span id="cmd">[+/-][@Projects]</span> : "+" or no sign, add a project to the display filter. "-" remove a project to the display filter Item. In order to filter global item use "global" as project name.</li>
+				<ul>
+					<li>Optional: no</li>
+				</ul>
+			</ul>
+			<li><span id="entete">Examples</span> :</li>
+			<ul>
+				<li><span id="cmd">f @prj1</span>: Add project "prj1" to the display filter. Items from "prj1" are displayed.</li>
+				<li><span id="cmd">f +@prj1</span>: Add project "prj1" to the display filter. Items from "prj1" are displayed.</li>
+				<li><span id="cmd">f @prj1 @prj2</span>: Add projects "prj1" and "prj2" to the display filter. Items from "prj1" and "prj2" are displayed.</li>
+				<li><span id="cmd">f -@prj1</span>: Remove project "prj1" from the display filter. Items from "prj1" are hided.</li>
+				<li><span id="cmd">f -@prj1 -@prj2</span>: Remove projects "prj1" and "prj2" from the display filter. Items from "prj1" and "prj2" are hided.</li>
+				<li><span id="cmd">f +@prj1 -@prj2</span>: Add project "prj1" to the display filter. Remove "prj2" from the display filter. Items from "prj1" are displayed and items from "prj2" are hided.</li>
+				<li><span id="cmd">f -@global</span>: Hide the global items from the display filter.</li>
+			</ul>
+		</ul>
+
+		<h1>Hide all projects</h1>
+		<ul>
+			<li><span id="entete">Syntaxe</span> : <span id="cmd">f--</span></li>
+			<li><span id="entete">Description</span> : Hide all projects.</li>
+			<li><span id="entete">Examples</span> :</li>
+			<ul>
+				<li><span id="cmd">f--</span>: Hide all items from all projects.</li>
+			</ul>
+		</ul>
+
+		<h1>Show all projects</h1>
+		<ul>
+			<li><span id="entete">Syntaxe</span> : <span id="cmd">f++</span></li>
+			<li><span id="entete">Description</span> : Show all projects.</li>
+			<li><span id="entete">Examples</span> :</li>
+			<ul>
+				<li><span id="cmd">f++</span>: Show all items from all projects.</li>
+			</ul>
+		</ul>
+
+		<h1>Timeline display</h1>
+		<ul>
+			<li><span id="entete">Syntaxe</span> : <span id="cmd">h</span></li>
+			<li><span id="entete">Description</span> : Set timeline display.</li>
+			<li><span id="entete">Examples</span> :</li>
+			<ul>
+				<li><span id="cmd">h</span>: Display the items as a timeline.</li>
+			</ul>
+		</ul>
+
+		<h1>Projects display</h1>
+		<ul>
+			<li><span id="entete">Syntaxe</span> : <span id="cmd">p</span></li>
+			<li><span id="entete">Description</span> : Set projects display.</li>
+			<li><span id="entete">Examples</span> :</li>
+			<ul>
+				<li><span id="cmd">p</span>: Display the items grouped in projects.</li>
+			</ul>
+		</ul>
+
+	</body>
+</html>

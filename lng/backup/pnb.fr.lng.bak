@@ -41,16 +41,21 @@ MNUSETTINGS=Paramètres
 MNUQUIT=Quitter
 
 MNUDISPLAY=Affichage
-MNUDISPLAYPROJECTS=Projets
-MNUDISPLAYTIMELINE=Chronologique
+MNUHELP=Aide
+
+[ACTION]
+ACTDISPLAYPROJECTS_CAPTION=Projets
+ACTDISPLAYPROJECTS_HINT=Affichage projets
+ACTDISPLAYTIMELINE_CAPTION=Chronologique
+ACTDISPLAYTIMELINE_HINT=Affichage chronologique
+ACTHELP_CAPTION=Aide
 
 [MAIN]
 STITEMS=Eléments:
 STNOTE=Note:
 STTASKACTIVE=Tâches actives:
-
-TBDISPLAYPROJECTS_HINT=Affichage projets
-TBDISPLAYTIMELINE_HINT=Affichage chronologique
+FILTER_HTML=Fichier HTML (*.html)|*.html
+EXPORT_HTML=Export liste en HTML
 TBALL_HINT=Montrer tous les projets
 TBNONE_HINT=Cacher tous les projets
 EDCOMMANDLINE=Ligne de commande
